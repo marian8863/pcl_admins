@@ -69,7 +69,7 @@ if(isset($_GET['get_id'])){
 
 
 
-$url = 'http://booking.pariscablimousine.com/admin/pdf_print.php?get_id=' . urlencode($pid);
+$url = 'https://booking.pariscablimousine.com/admin/pdf_print.php?get_id=' . urlencode($pid);
 
 
 // Fetch the contents of the URL
