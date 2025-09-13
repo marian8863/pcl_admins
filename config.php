@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-//database connection
-// define('DB_HOST','mis.achchuthan.org');
-// define('DB_USER','c1987705c');
+// database connection
+// define('DB_HOST', 'pcl_admins.pariscablimousine.com');
+// define('DB_USER','c1987705c ');
 // define('DB_PASS','7u33gvqUWtktw25');
 // define('DB_NAME','c1987705c_admin');
 

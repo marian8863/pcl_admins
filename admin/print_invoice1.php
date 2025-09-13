@@ -65,7 +65,7 @@ if(isset($_GET['get_id'])){
 
     $dompdf->setOptions($options);
 
-//   $url = 'http://localhost/pcl_admin/taxi1/admin/pdf_print.php?get_id=' . urlencode($pid);
+//   $url = 'http://localhost/pcl_admin/pcl_admins/admin/pdf_print.php?get_id=' . urlencode($pid);
 
 
 

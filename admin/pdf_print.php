@@ -15,9 +15,10 @@ if(isset($_GET['get_id'])){
     passenger.nb_de_passager,
     passenger.user_id,
     passenger.chauffeur_desc,
+    users.id,
     users.username,
     users.phone,
-    users.user_desc,
+    users_desc.user_description,
     passenger.Tarif,
     tarif_type.type_tt,
     select_an_option_desc.tm_id,
@@ -45,6 +46,7 @@ JOIN type_mission           ON type_mission.tm_id = passenger.tm_id
 JOIN type_de_mission_desc   ON type_de_mission_desc.p_id = passenger.p_id
 JOIN passenger_description  ON passenger_description.p_id = passenger.p_id
 JOIN users                  ON users.id = passenger.user_id
+JOIN users_desc             ON users.user_desc=users_desc.user_desc
 JOIN tarif_type             ON tarif_type.tt_id = passenger.tt_id
 JOIN option_desc            ON option_desc.p_id = passenger.p_id
 JOIN select_an_option_desc  ON select_an_option_desc.p_id = passenger.p_id
@@ -55,7 +57,7 @@ LEFT JOIN flight_locations pickup
        ON passenger.pickup_location = pickup.id
 LEFT JOIN flight_locations dropoff 
        ON passenger.dropoff_location = dropoff.id
-WHERE passenger.p_id = $pid";
+WHERE passenger.p_id =$pid";
       $result = mysqli_query($con,$sql);
       if(mysqli_num_rows($result)==1) {       
           $row=mysqli_fetch_assoc($result);
@@ -66,9 +68,10 @@ WHERE passenger.p_id = $pid";
 
           $nb_de_passager=$row['nb_de_passager'];
           $user_id=$row['user_id'];
+          $users_id=$row['id'];
           $username=$row['username'];
           $phone=$row['phone'];
-          $user_desc=$row['user_desc'];
+          $user_desc=$row['user_description'];
           $Vehicule_num=$row['Vehicule_num'];
           $cha_d=$row['chauffeur_desc'];
           $Tarif=$row['Tarif'];
@@ -205,6 +208,11 @@ if ($row['dropoff_location'] === 'others') {
                     </td>
                     </tr> 
 
+                    <tr>
+                    <th scope="row">Date de prise en charge</th>
+                    <td><?php echo $date_de_prise_en_charge;?> | <?php echo $Time;?></td>
+                    </tr> 
+
 
                     <?php
                     if ($row['pickup_location'] === 'others') {
@@ -298,7 +306,7 @@ if ($row['dropoff_location'] === 'others') {
                         <?php echo '€ '.$Tarif;?> | <?php echo $type_tt;?> 
 
                     <?php
-                    if($user_desc == 'no_desc'){
+                    if($users_id == 4){
                         // echo "hi";
 
                     }else{

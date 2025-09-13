@@ -46,7 +46,7 @@ $filter_map = [
 ];
 
 // Build SQL
-$sql = "SELECT id, username, email, phone, user_type, profile FROM users";
+$sql = "SELECT `id`, `username`, `email`, `phone`, `user_type`, `profile` ,`user_desc`FROM users";
 
 if ($filter_type && isset($filter_map[$filter_type])) {
     $user_type = $filter_map[$filter_type];

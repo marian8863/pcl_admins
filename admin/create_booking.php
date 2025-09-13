@@ -556,7 +556,7 @@ if(isset($_GET['get_id'])){
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>Chauffeur Desc</label>
-                        <textarea class="form-control" rows="3" placeholder="Enter ..."  name="chauffeur_desc" required><?php if(isset($_GET['get_id'])){ echo (htmlspecialchars($cha_d));}else{ echo "Merci d’envoyer Statut : En route / Sur place / À bord / Déposé ";}?></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Enter ..."  name="chauffeur_desc" required><?php if(isset($_GET['get_id'])){ echo (htmlspecialchars($cha_d));}else{ echo "Bouteilles d'eau - Tenue Pro -  Merci d’envoyer Statut : En route / Sur place / À bord / Déposé";}?></textarea>
                       </div>
                     </div>
                   </div>

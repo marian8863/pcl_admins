@@ -13,6 +13,8 @@ $required_menu_name = 'view_passenger_action_cancel'; // ✅ MUST be defined bef
 // echo "Checking menu: " . $required_menu_name;
  include 'auth_check.php'; 
 
+
+ 
 ?>
 <!--END DON'T CHANGE THE ORDER-->
 

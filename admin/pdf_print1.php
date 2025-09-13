@@ -13,9 +13,9 @@ if(isset($_GET['get_id'])){
     passenger.nb_de_passager,
     passenger.d_id,
     passenger.chauffeur_desc,
-    driver.dname,
-    driver.dtp_num,
-    driver.driver_desc,
+    user.username,
+    user.phone,
+    user.user_desc,
     passenger.Tarif,
     tarif_type.type_tt,
     select_an_option_desc.tm_id,
@@ -33,9 +33,9 @@ if(isset($_GET['get_id'])){
     who_give_booking.wg_desc,
     who_give_booking.wg_question
 
-    FROM passenger,option_tel,vehicule,type_mission,type_de_mission_desc,passenger_description,driver,tarif_type,option_desc,select_an_option_desc,who_give_booking
-    WHERE passenger.p_id=option_tel.p_id and vehicule.v_id=passenger.Vehicule_num and type_mission.tm_id=passenger.tm_id and type_de_mission_desc.p_id=passenger.p_id and passenger_description.p_id=passenger.p_id and driver.d_id=passenger.d_id and tarif_type.tt_id=passenger.tt_id and option_desc.p_id=passenger.p_id and select_an_option_desc.p_id=passenger.p_id and passenger.p_id=who_give_booking.p_id 
-    
+    FROM passenger,option_tel,vehicule,type_mission,type_de_mission_desc,passenger_description,tarif_type,option_desc,select_an_option_desc,who_give_booking
+    WHERE passenger.p_id=option_tel.p_id and vehicule.v_id=passenger.Vehicule_num and type_mission.tm_id=passenger.tm_id and type_de_mission_desc.p_id=passenger.p_id and passenger_description.p_id=passenger.p_id and users.id=passenger.user_id and tarif_type.tt_id=passenger.tt_id and option_desc.p_id=passenger.p_id and select_an_option_desc.p_id=passenger.p_id and passenger.p_id=who_give_booking.p_id 
+    and user.user_desc=users_desc.user_desc
     and passenger.p_id=$pid";
       $result = mysqli_query($con,$sql);
       if(mysqli_num_rows($result)==1) {       
@@ -47,10 +47,10 @@ if(isset($_GET['get_id'])){
           $adresse_du_pick_up=$row['adresse_du_pick_up'];
           $adresse_de_depose=$row['adresse_de_depose'];
           $nb_de_passager=$row['nb_de_passager'];
-          $d_id=$row['d_id'];
-          $dname=$row['dname'];
-          $dtp_num=$row['dtp_num'];
-          $driver_desc=$row['driver_desc'];
+          $user_id=$row['id'];
+          $username=$row['username'];
+          $phone=$row['phone'];
+          $user_desc=$row['user_desc'];
           $Vehicule_num=$row['Vehicule_num'];
           $cha_d=$row['chauffeur_desc'];
           $Tarif=$row['Tarif'];
@@ -220,11 +220,11 @@ if(isset($_GET['get_id'])){
                     <td><?php echo '€ '.$Tarif;?> | <?php echo $type_tt;?> 
 
                     <?php
-                    if($driver_desc == 'no_desc'){
+                    if($user_desc == 'no_desc'){
                         // echo "hi";
 
                     }else{
-                         echo '<br> <br>'.$driver_desc;
+                         echo '<br> <br>'.$user_desc;
                     }
                     ?>
                     </td>

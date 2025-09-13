@@ -44,12 +44,12 @@ if (!$user) {
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Drivers Edit Profiles</h1>
+            <h1 class="m-0 text-dark">Authorizers Edit Profiles</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item ">Drivers Detail
+              <li class="breadcrumb-item ">Authorizers Detail
               <?php
                   // echo  $Sdate = new DateTime("now", new DateTimeZone('Asia/Colombo'));
                   // date_default_timezone_set('UTC');
@@ -110,12 +110,7 @@ if (!$user) {
                      value="<?php echo $user['email']; ?>" required>
             </div>
 
-            <!-- Phone -->
-            <div class="form-group mb-3">
-              <label class="form-label">Phone</label>
-              <input type="tel" class="form-control" id="phone" name="phone" 
-                     value="<?php echo $user['phone']; ?>" required>
-            </div>
+
 
             <!-- User Type -->
             <div class="form-group mb-3">
@@ -126,6 +121,20 @@ if (!$user) {
                 <option value="user"   <?php if ($user['user_type'] == 'user_enties') echo 'selected'; ?>>User</option>
                 <option value="driver" <?php if ($user['user_type'] == 'driver') echo 'selected'; ?>>Driver</option>
               </select>
+            </div>
+
+                        <!-- Authorizers Desc -->
+            <div class="form-group mb-3">
+              <label class="form-label">Authorizers Description</label>
+              <textarea  class="form-control" id="user_desc" name="user_desc" 
+                     required><?php echo $user['user_desc']; ?></textarea>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-group mb-3">
+              <label class="form-label">Phone</label>
+              <input type="tel" class="form-control" id="phone" name="phone" 
+                     value="<?php echo $user['phone']; ?>" required>
             </div>
 
             <!-- Current Password -->

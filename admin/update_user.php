@@ -11,6 +11,7 @@ if (isset($_POST['update_user'])) {
     $email     = mysqli_real_escape_string($con, $_POST['email']);
     $phone     = mysqli_real_escape_string($con, $_POST['phone']);
     $user_type = mysqli_real_escape_string($con, $_POST['user_type']);
+    $user_desc = mysqli_real_escape_string($con, $_POST['user_desc']);
 
     // Handle password change
     $update_password_sql = "";
@@ -79,7 +80,8 @@ if (isset($_POST['update_user'])) {
                 username='$username',
                 email='$email',
                 phone='$phone',
-                user_type='$user_type'
+                user_type='$user_type',
+                user_desc='$user_desc'
                 $update_password_sql
                 $update_profile_sql
               WHERE id=$id";
