@@ -193,7 +193,7 @@ if ($row['dropoff_location'] === 'others') {
                 <table class="table table-bordered fontSize_table">
                 <tbody>
                     <tr>
-                    <th scope="row">Référence</th>
+                    <th scope="row" >Référence</th>
                     <td>PCL100<?php echo $pid;?></td>
                     </tr>
 
@@ -209,7 +209,7 @@ if ($row['dropoff_location'] === 'others') {
                     </tr> 
 
                     <tr>
-                    <th scope="row">Date de prise en charge</th>
+                    <th scope="row" style="font-size: 10px; font-weight: bold;">Date de prise en charge</th>
                     <td><?php echo $date_de_prise_en_charge;?> | <?php echo $Time;?></td>
                     </tr> 
 

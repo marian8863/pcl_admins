@@ -24,14 +24,14 @@ while ($row = $result->fetch_assoc()) {
 
 if(isset($_GET['get_id'])){
   $pid=$_GET['get_id'];
-  $sql="SELECT passenger.passager_principal,passenger.date_de_prise_en_charge,passenger.Time,passenger.pickup_location,tarif_type.type_tt,tarif_type.tt_id,passenger.dropoff_location,
+  $sql="SELECT DISTINCT  passenger.passager_principal,passenger.date_de_prise_en_charge,passenger.Time,passenger.pickup_location,tarif_type.type_tt,tarif_type.tt_id,passenger.dropoff_location,
   passenger.nb_de_passager,passenger.user_id,passenger.Vehicule_num,passenger.chauffeur_desc,passenger.Tarif,passenger.tm_id,option_desc.op_desc,option_desc.op_question,passenger_description.passenger_select_quesntion,
   passenger_description.passenger_select_desc,passenger_pickup_desc.ppd_desc,passenger_pickup_desc.ppd_question,passenger_dropoff_desc.pdd_desc,passenger_dropoff_desc.pdd_question,type_de_mission_desc.type_desc,type_de_mission_desc.select_quesntion,users.username,users.phone,type_mission.type_m,option_tel.op_tel_question,option_tel.op_tel_desc,select_an_option_desc.tm_desc,who_give_booking.wg_desc,who_give_booking.wg_question
   
+  from passenger ,option_desc,passenger_description,passenger_pickup_desc, passenger_dropoff_desc,type_de_mission_desc,users,type_mission,option_tel,select_an_option_desc,tarif_type,who_give_booking,users_desc
   
-  from passenger ,option_desc,passenger_description,passenger_pickup_desc, passenger_dropoff_desc,type_de_mission_desc,users,type_mission,option_tel,select_an_option_desc,tarif_type,who_give_booking
-  
-  WHERE passenger.p_id=option_desc.p_id and passenger.p_id=passenger_description.p_id and passenger.p_id=passenger_pickup_desc.p_id and passenger.p_id=passenger_dropoff_desc.p_id and passenger.p_id=type_de_mission_desc.p_id and passenger.tm_id=type_mission.tm_id and passenger.user_id=users.id and  passenger.p_id=option_tel.p_id and passenger.tm_id=select_an_option_desc.tm_id and passenger.p_id=select_an_option_desc.p_id and passenger.tt_id=tarif_type.tt_id and passenger.p_id=who_give_booking.p_id and
+  WHERE passenger.p_id=option_desc.p_id and passenger.p_id=passenger_description.p_id and passenger.p_id=passenger_pickup_desc.p_id and passenger.p_id=passenger_dropoff_desc.p_id and passenger.p_id=type_de_mission_desc.p_id and passenger.tm_id=type_mission.tm_id and passenger.user_id=users.id and  passenger.p_id=option_tel.p_id and passenger.tm_id=select_an_option_desc.tm_id and passenger.p_id=select_an_option_desc.p_id and passenger.tt_id=tarif_type.tt_id and passenger.p_id=who_give_booking.p_id and 
+
   passenger.p_id=$pid";
     $result = mysqli_query($con,$sql);
     if(mysqli_num_rows($result)==1) {       
@@ -47,7 +47,7 @@ if(isset($_GET['get_id'])){
         $dn=$row['user_id'];
         $dtn=$row['phone'];
         $vn=$row['Vehicule_num'];
-        $cha_d=$row['chauffeur_desc'];
+       
         $ta=$row['Tarif'];
         $op_d=$row['op_desc'];
         $tdm=$row['tm_id'];
@@ -69,6 +69,13 @@ if(isset($_GET['get_id'])){
     }
 
 }
+
+    $sql="SELECT `user_desc_id`, `user_desc`, `user_description` FROM `users_desc` WHERE  user_desc_id= 2";
+    $result = mysqli_query($con,$sql);
+    if(mysqli_num_rows($result)==1) {       
+        $row=mysqli_fetch_assoc($result);
+        $ud=$row['user_description'];
+    }
 
 ?>
 
@@ -556,7 +563,9 @@ if(isset($_GET['get_id'])){
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>Chauffeur Desc</label>
-                        <textarea class="form-control" rows="3" placeholder="Enter ..."  name="chauffeur_desc" required><?php if(isset($_GET['get_id'])){ echo (htmlspecialchars($cha_d));}else{ echo "Bouteilles d'eau - Tenue Pro -  Merci d’envoyer Statut : En route / Sur place / À bord / Déposé";}?></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Enter ..."  name="" disabled>
+                          <?php echo htmlspecialchars($ud);?>
+                        </textarea>
                       </div>
                     </div>
                   </div>
@@ -726,7 +735,6 @@ if(isset($_POST['add'])){
 
     !empty($_POST['nb_de_passager'])&& 
     !empty($_POST['user_id'])&&
-    !empty($_POST['chauffeur_desc'])&&
     !empty($_POST['Vehicule_num'])&&
     !empty($_POST['Tarif'])&&
     !empty($_POST['Tarif_Types'])&&
@@ -744,13 +752,12 @@ if(isset($_POST['add'])){
         $nb_de_passager=$_POST['nb_de_passager'];
         $user_id=$_POST['user_id'];
         $Vehicule_num=$_POST['Vehicule_num'];
-        $chauffeur_desc=$_POST['chauffeur_desc'];
         $Tarif=$_POST['Tarif'];
         $Tarif_Types=$_POST['Tarif_Types'];
         $tm_id=$_POST['tm_id'];
 
-        $sql='INSERT INTO `passenger` (`passager_principal`,`date_de_prise_en_charge`,`Time`,`pickup_location`,`dropoff_location`,`nb_de_passager`,`user_id`,`Vehicule_num`,`chauffeur_desc`,`Tarif`,`tt_id`,`tm_id`) 
-        values("'.$passager_principal.'","'.$date_de_prise_en_charge.'","'.$Time.'","'.$pickup_location.'","'.$dropoff_location.'","'.$nb_de_passager.'","'.$user_id.'","'.$Vehicule_num.'","'.$chauffeur_desc.'","'.$Tarif.'","'.$Tarif_Types.'","'.$tm_id.'")';
+        $sql='INSERT INTO `passenger` (`passager_principal`,`date_de_prise_en_charge`,`Time`,`pickup_location`,`dropoff_location`,`nb_de_passager`,`user_id`,`Vehicule_num`,`Tarif`,`tt_id`,`tm_id`) 
+        values("'.$passager_principal.'","'.$date_de_prise_en_charge.'","'.$Time.'","'.$pickup_location.'","'.$dropoff_location.'","'.$nb_de_passager.'","'.$user_id.'","'.$Vehicule_num.'","'.$Tarif.'","'.$Tarif_Types.'","'.$tm_id.'")';
         if(mysqli_query($con,$sql)){
 
           echo '<script>';
@@ -1068,7 +1075,7 @@ if(isset($_POST['edit'])){
   !empty($_POST['nb_de_passager'])&& 
   !empty($_POST['user_id'])&&
   !empty($_POST['Vehicule_num'])&&
-  !empty($_POST['chauffeur_desc'])&&
+  // !empty($_POST['chauffeur_desc'])&&
   !empty($_POST['Tarif'])&&
   !empty($_POST['Tarif_Types'])&&
   !empty($_POST['tm_id'])){
@@ -1085,7 +1092,7 @@ if(isset($_POST['edit'])){
     $nb_de_passager=$_POST['nb_de_passager'];
     $user_id=$_POST['user_id'];
     $Vehicule_num=$_POST['Vehicule_num'];
-    $chauffeur_desc=$_POST['chauffeur_desc'];
+    // $chauffeur_desc=$_POST['chauffeur_desc'];
     $Tarif=$_POST['Tarif'];
     $Tarif_Types=$_POST['Tarif_Types'];
     $tm_id=$_POST['tm_id'];
@@ -1103,7 +1110,6 @@ if(isset($_POST['edit'])){
   `nb_de_passager`="'.$nb_de_passager.'",
   `user_id`="'.$user_id.'",
   `Vehicule_num`="'.$Vehicule_num.'",
-  `chauffeur_desc`="'.$chauffeur_desc.'",
   `Tarif`="'.$Tarif.'",
   `tt_id`="'.$Tarif_Types.'",
   `tm_id`="'.$tm_id.'"
