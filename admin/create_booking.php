@@ -579,8 +579,8 @@ if ($result && mysqli_num_rows($result) == 1) {
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>Chauffeur Desc</label>
-                        <textarea class="form-control" rows="3" placeholder="Enter ..."  name="" disabled>
-                          <?php echo htmlspecialchars($ud);?>
+                        <textarea class="form-control" rows="3"   name="" >
+                          <?php echo $ud;?>
                         </textarea>
                       </div>
                     </div>
