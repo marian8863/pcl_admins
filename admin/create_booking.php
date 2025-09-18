@@ -70,9 +70,7 @@ if(isset($_GET['get_id'])){
 
 }
 
-    $sql="SELECT `user_description`
-FROM `users_desc`
-WHERE user_desc_id = 2";
+    $sql="SELECT DISTINCT user_description from users_desc , passenger where passenger.chauffeur_desc=users_desc.user_desc and passenger.chauffeur_desc='DriversDescription'";
     $result = mysqli_query($con,$sql);
     if(mysqli_num_rows($result)==1) {       
         $row=mysqli_fetch_assoc($result);
