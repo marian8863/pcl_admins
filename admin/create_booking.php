@@ -70,7 +70,9 @@ if(isset($_GET['get_id'])){
 
 }
 
-    $sql="SELECT `user_desc_id`, `user_desc`, `user_description` FROM `users_desc` WHERE  user_desc_id= '2'";
+    $sql="SELECT `user_description`
+FROM `users_desc`
+WHERE user_desc_id = 2";
     $result = mysqli_query($con,$sql);
     if(mysqli_num_rows($result)==1) {       
         $row=mysqli_fetch_assoc($result);
