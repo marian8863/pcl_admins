@@ -68,14 +68,30 @@ if(isset($_GET['get_id'])){
         $tti=$row['tt_id'];
     }
 
-}
+}else {
+        // ❌ No passenger found (or multiple rows when you expected one)
+        $pp = $dd = $tm = $pl = $dl = $np = $dn = $dtn = $vn = $ta = $op_d = 
+        $tdm = $op_q = $psq = $psd = $td = $sq = $wg_q = $wg = $ppd_q = 
+        $ppd = $pdd_q = $pdd = $op_tel_q = $op_tel_desc = $Dispo_Hours = $tti = null;
 
-    $sql="SELECT DISTINCT user_description from users_desc , passenger where passenger.chauffeur_desc=users_desc.user_desc and passenger.chauffeur_desc='Drivers'";
-    $result = mysqli_query($con,$sql);
-    if(mysqli_num_rows($result)==1) {       
-        $row=mysqli_fetch_assoc($result);
-        $ud=$row['user_description'];
+        // Optional: Debug/log
+        // echo "No passenger data found for ID $pid";
     }
+
+$sql = "SELECT user_description 
+        FROM users_desc 
+        WHERE user_desc_id = 2 
+        LIMIT 1";
+
+$result = mysqli_query($con, $sql);
+
+if ($result && mysqli_num_rows($result) == 1) {
+    $row = mysqli_fetch_assoc($result);
+    $ud = $row['user_description'];
+} else {
+    $ud = null; // ❌ no description found
+    // Optional: echo "No user description found for ID 2";
+}
 
 ?>
 
