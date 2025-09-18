@@ -580,7 +580,9 @@ if ($result && mysqli_num_rows($result) == 1) {
                       <div class="form-group">
                         <label>Chauffeur Desc</label>
                         <textarea class="form-control" rows="3"   name="" >
-                          <?php echo $ud;?>
+
+<?php echo htmlspecialchars($ud, ENT_QUOTES, 'UTF-8'); ?>
+
                         </textarea>
                       </div>
                     </div>
