@@ -121,10 +121,16 @@ if ($row['dropoff_location'] === 'others') {
 
             
       }
+      
   
   }
 
+
+
 ?>
+
+
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -289,11 +295,25 @@ if ($row['dropoff_location'] === 'others') {
                     ?>
                     </td>
                     </tr>
+
+                    <?php
+  $sql1 = "SELECT user_description 
+        FROM users_desc 
+        WHERE user_desc_id = 2 
+        LIMIT 1";
+
+$result1 = mysqli_query($con, $sql1);
+
+if ($result1 && mysqli_num_rows($result1) == 1) {
+    $row = mysqli_fetch_assoc($result1);
+    $ud = $row['user_description'];
+}
+?>
                     <tr>
                     <th scope="row">Chauffeur</th>
                     <td><?php echo $username;?> | <?php echo $phone;?>
                     <br>
-                    <?php echo nl2br($cha_d);?>
+                    <?php echo nl2br($ud);?>
                     </td>
                     </tr>
                     <tr>

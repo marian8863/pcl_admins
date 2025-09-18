@@ -579,7 +579,7 @@ if ($result && mysqli_num_rows($result) == 1) {
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>Chauffeur Desc</label>
-                        <textarea class="form-control" rows="3"   name="" >
+                        <textarea class="form-control" rows="3"   name=""  disabled>
 
 <?php echo $ud; ?>
 
