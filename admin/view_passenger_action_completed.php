@@ -107,7 +107,7 @@ if ($result) {
                     <th>Passager Principal</th>
                     <th>Time</th>
                     <th>Type de Mission</th>
-                  
+                    <th>Driver</th>
                     <th>Tarif</th>
                     <th>Action</th>
                   
@@ -123,7 +123,7 @@ if ($result) {
                         <td><?= $row['passager_principal']?></td>
                         <td><?= $row['Time']?></td>
                         <td><?= $row['type_m']?></td>
-                        <!-- <td>< $row['passager_principal']?></td> -->
+                        <td><?= $row['username']?></td>
                         <td><?= $row['Tarif']?></td>
                         <td>
                             <a href="create_booking.php?get_id=<?= $row["p_id"]?>" class="btn btn-info"><i class="fas fa-edit"></i></a>
