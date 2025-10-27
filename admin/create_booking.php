@@ -9,6 +9,10 @@ $u_n = $_SESSION['user']['username'];
 $u_t = $_SESSION['user']['user_type'];
 $u_p = $_SESSION['user']['profile'];
 
+$required_menu_name = 'create_booking'; // ✅ MUST be defined before include
+// echo "Checking menu: " . $required_menu_name;
+ include 'auth_check.php'; 
+
 
 $vn=$dn=$sq=$psq=$op_q=$tdm=$cd=$op_tel_q=$tti=$wg_q=$ppd_q=$pdd_q=$pl=$dl=null;
 ?>
