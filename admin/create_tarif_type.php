@@ -16,11 +16,12 @@ $u_p = $_SESSION['user']['profile'];
 
 if(isset($_GET['get_id'])){
     $ttid=$_GET['get_id'];
-    $sql="SELECT type_tt from tarif_type where tt_id='$ttid'";
+    $sql="SELECT type_tt,type_tt_desc from tarif_type where tt_id='$ttid'";
     $result = mysqli_query($con,$sql);
     if(mysqli_num_rows($result)==1) {       
         $row=mysqli_fetch_assoc($result);
         $type_tt=$row['type_tt'];
+        $type_tt_desc=$row['type_tt_desc'];
     }
 }
 ?>
@@ -76,12 +77,21 @@ if(isset($_GET['get_id'])){
                 <div class="card-body">
                 <form method="POST">
                  <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                       <!-- text input -->
                       <div class="form-group">
                         <label>Tarif Type Name</label>
                         <input type="text" class="form-control" name="type_tt" value="<?php if(isset($_GET['get_id'])){ echo $type_tt;}?>" placeholder="Enter ...">
                       </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <!-- text input -->
+                      <div class="form-group">
+                        <label>Tarif Type Desc </label>
+                            <textarea class="form-control" id="" name="type_tt_desc" 
+                                placeholder="Enter Desc details"><?php if(isset($_GET['get_id'])){ echo ($type_tt_desc); } ?>
+                              </textarea>                     
+                        </div>
                     </div>
                   </div>
                   <div class="row">
@@ -124,10 +134,11 @@ if(isset($_GET['get_id'])){
 <?php
 if(isset($_POST['add'])){
 
-    if(!empty($_POST['type_tt'])){
+    if(!empty($_POST['type_tt']) && !empty($_POST['type_tt_desc'])){
         $type_tt=$_POST['type_tt'];
+        $type_tt_desc=$_POST['type_tt_desc'];
   
-        $sql="INSERT INTO `tarif_type` (`type_tt`) values('$type_tt')";
+        $sql="INSERT INTO `tarif_type` (`type_tt`,`type_tt_desc`) values('$type_tt','$type_tt_desc')";
         if(mysqli_query($con,$sql)){
             //$message ="<h5>New record created successfully</h5>";
           echo '<script>';
@@ -158,11 +169,13 @@ if(isset($_POST['add'])){
 
 <?php
 if(isset($_POST['edit'])){
-    if(!empty($_POST['type_tt'])){
+    if(!empty($_POST['type_tt'])&& !empty($_POST['type_tt_desc'])){
         $type_tt=$_POST['type_tt'];
+        $type_tt_desc=$_POST['type_tt_desc'];
 
   $sql='UPDATE  `tarif_type`
-  set `type_tt` ="'.$type_tt.'"
+  set `type_tt` ="'.$type_tt.'",
+  `type_tt_desc` ="'.$type_tt_desc.'"
 
   where `tt_id`="'.$ttid.'"';
   if(mysqli_query($con,$sql)){

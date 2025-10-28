@@ -81,8 +81,12 @@ if (isset($_POST['update_status'])) {
 
     if ($check->num_rows == 0) {
         // Insert into history
-        $stmt = $con->prepare("INSERT INTO ride_status_history (p_id, status) VALUES (?, ?)");
-        $stmt->bind_param("is", $p_id, $status);
+        $status_date = $_POST['status_date'] ?? date('Y-m-d');
+$status_time = $_POST['status_time'] ?? date('H:i:s');
+$manual_datetime = date('Y-m-d H:i:s', strtotime("$status_date $status_time"));
+
+$stmt = $con->prepare("INSERT INTO ride_status_history (p_id, status, updated_at) VALUES (?, ?, ?)");
+$stmt->bind_param("iss", $p_id, $status, $manual_datetime);
         if ($stmt->execute()) {
             echo '<script>
                 Swal.fire({
@@ -152,12 +156,13 @@ $extra_condition = "";
 
 // Restrict query based on role
 if ($user_type === 'driver') {
-    // Driver only sees his own rides
-    $extra_condition = " AND p.user_id = " . (int)$logged_user_id;
+    // Driver sees his own rides + user_id 53
+    $extra_condition = " AND (p.user_id = " . (int)$logged_user_id . " OR p.user_id = 53)";
 } elseif ($user_type === 'user_enties') {
-    // Normal users should not see anything
-    $extra_condition = " AND p.user_id = " . (int)$logged_user_id;
-} 
+    // Normal user sees only his own rides + user_id 53
+    $extra_condition = " AND (p.user_id = " . (int)$logged_user_id . " OR p.user_id = 53)";
+}
+
 // admin and ADM → see everything, so no condition needed
 
 $query = "
@@ -325,16 +330,74 @@ if ($result) {
 
                           
                           <td>
-                          <?php if (in_array($user_type, ['admin', 'ADM','user_enties'])): ?>
+                          <?php if (in_array($user_type, ['admin', 'ADM','driver','user_enties'])): ?>
                           <!-- Admin & ADM: Full access -->
                           <a href="create_booking.php?get_id=<?= $row["p_id"]?>" class="btn btn-info">
                             <i class="fas fa-edit"></i>
                           </a>
                           <?php endif; ?>
                           <?php if (in_array($user_type, ['admin', 'ADM','driver' ,'user_enties'])): ?>
-                          <a href="print_invoice1.php?get_id=<?= $row["p_id"]?>" target="_blank" class="btn btn-success">
-                            <i class="fas fa-download"></i>
-                          </a> 
+<!-- ✅ Download Button -->
+<a href="#" 
+   onclick="setPDFId(<?= $row['p_id'] ?>)" 
+   class="btn btn-success" 
+   data-toggle="modal" 
+   data-target="#modal-pdf">
+   <i class="fas fa-download"></i>
+</a>
+
+<!-- ✅ Modal (AdminLTE / Bootstrap 4 style) -->
+<div class="modal fade" id="modal-pdf">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h4 class="modal-title">Choose PDF Type</h4>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body text-center">
+        <p>Select the type of PDF you want to generate:</p>
+      </div>
+
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <div>
+          <button type="button" class="btn btn-info" id="passengerBtn">Passenger</button>
+          <button type="button" class="btn btn-success" id="billingBtn">Billing</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedPid = null;
+
+function setPDFId(pid) {
+    selectedPid = pid;
+}
+
+// Passenger PDF
+document.getElementById('passengerBtn').addEventListener('click', function() {
+    if (selectedPid) {
+        window.open(`print_invoice1.php?get_id=${selectedPid}&type=passenger`, '_blank');
+        $('#modal-pdf').modal('hide');
+    }
+});
+
+// Billing PDF
+document.getElementById('billingBtn').addEventListener('click', function() {
+    if (selectedPid) {
+        window.open(`print_invoice1.php?get_id=${selectedPid}&type=billing`, '_blank');
+        $('#modal-pdf').modal('hide');
+    }
+});
+</script>
+
+
+ 
                           <?php endif; ?>
                           <?php if (in_array($user_type, ['admin', 'ADM'])): ?>
                           <button class="btn btn-danger" 
@@ -390,16 +453,47 @@ if ($result) {
 
   <?php if (!empty($remaining)): ?>
     <!-- Show dropdown only if some statuses remain -->
-    <form method="post" style="margin:6px 0; display:flex; gap:6px;">
-      <input type="hidden" name="p_id" value="<?= $row['p_id'] ?>">
-      <select name="status" class="form-control form-control-sm" required>
-        <option disabled selected>-- select status --</option>
-        <?php foreach ($remaining as $st): ?>
-          <option value="<?= $st ?>"><?= ucwords($st) ?></option>
-        <?php endforeach; ?>
-      </select>
-      <button type="submit" name="update_status" class="btn btn-sm btn-warning">Update</button>
-    </form>
+<form method="post" style="margin:6px 0; display:flex; flex-wrap:wrap; gap:6px;" class="status-form">
+  <input type="hidden" name="p_id" value="<?= $row['p_id'] ?>">
+
+  <select name="status" class="form-control form-control-sm status-select" required>
+    <option disabled selected>-- select status --</option>
+    <?php foreach ($remaining as $st): ?>
+      <option value="<?= $st ?>"><?= ucwords($st) ?></option>
+    <?php endforeach; ?>
+  </select>
+
+  <?php
+  // Set current system date & time as default
+  $current_date = date('Y-m-d');
+  $current_time = date('H:i');
+  ?>
+
+  <!-- Date & time inputs (hidden initially, shown after selecting status) -->
+  <input type="date" name="status_date" class="form-control form-control-sm status-date" 
+         value="<?= $current_date ?>" style="display:none;" required>
+  <input type="time" name="status_time" class="form-control form-control-sm status-time" 
+         value="<?= $current_time ?>" style="display:none;" required>
+
+  <button type="submit" name="update_status" class="btn btn-sm btn-warning">Update</button>
+</form>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".status-form").forEach(form => {
+    const select = form.querySelector(".status-select");
+    const dateInput = form.querySelector(".status-date");
+    const timeInput = form.querySelector(".status-time");
+
+    select.addEventListener("change", () => {
+      // Show date & time fields only after selecting a status
+      dateInput.style.display = "block";
+      timeInput.style.display = "block";
+    });
+  });
+});
+</script>
+
   <?php endif; ?>
 
   <!-- Show completed statuses -->

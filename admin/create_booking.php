@@ -554,20 +554,35 @@ if ($result && mysqli_num_rows($result) == 1) {
                       <!-- text input -->
                       <div class="form-group">
                         <label>Chauffeur</label>
-                        <select class="form-control Chauffeur_select" style="width: 100%;" name="user_id" id="didx"  onchange="showTelNum(this.value)" >
-                        <option value="null" selected disabled >---- Select the Chauffeur ---- </option>
-                        <?php
-                        $sql="SELECT `id`, `username` FROM `users` WHERE `user_type` IN ('driver', 'user_enties')";
-                        $result = mysqli_query($con,$sql);
-                        if (mysqli_num_rows($result) > 0 ) {
-                        while($row=mysqli_fetch_assoc($result)){
-                            echo '<option  value="'.$row["id"].'" required';
-                            if($row["id"]== $dn) echo ' selected';
-                            echo '>'.$row["username"].'</option>';
-                        }}
-                           
-                        ?>
-                        </select>
+<select class="form-control Chauffeur_select" style="width: 100%;" name="user_id" id="didx" onchange="showTelNum(this.value)">
+    <option value="null" selected disabled>---- Select the Chauffeur ----</option>
+    <?php
+    $u_t = $_SESSION['user']['user_type']; // user type from session
+    $user_id = $_SESSION['user']['id'];     // logged in user id
+
+    // Base SQL
+    $sql = "SELECT `id`, `username` FROM `users` WHERE `user_type`='driver'";
+
+    if($u_t == 'driver') {
+        // Driver sees only himself + "kutti"
+        $sql .= " AND (`id` = $user_id OR `username` = 'Choisir un Chauffeur')";
+    } elseif($u_t == 'user_enties') {
+        // user_enties sees only "kutti"
+        $sql .= " AND `username` = 'Choisir un Chauffeur'";
+    } 
+    // ADM and admin see all drivers → no extra condition
+
+    $result = mysqli_query($con, $sql);
+    if(mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)) {
+            echo '<option value="'.$row["id"].'"';
+            if(isset($dn) && $row["id"] == $dn) echo ' selected';
+            echo '>'.$row["username"].'</option>';
+        }
+    }
+    ?>
+</select>
+
                       </div>
                     </div>
                     <div class="col-sm-6">

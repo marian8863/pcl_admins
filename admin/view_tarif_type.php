@@ -88,6 +88,7 @@ if(isset($_GET['get_id'])){
                     <!-- <th data-visible="false">Id</th> -->
                     <th>Tarif ID</th>
                     <th> Tarif Type </th>
+                    <th> Tarif Desc </th>
                     <th>Action</th>
                     <!-- <th data-visible="false">Create Date</th> -->
                   </tr>
@@ -108,7 +109,7 @@ if(isset($_GET['get_id'])){
                   <tbody>
                
                     <?php  
-                    $sql="SELECT `tt_id`,`type_tt` FROM tarif_type";         
+                    $sql="SELECT `tt_id`,`type_tt`,`type_tt_desc` FROM tarif_type";         
                     $res=$con->query($sql);
                     while($row=$res->fetch_assoc()){    
                             
@@ -117,6 +118,7 @@ if(isset($_GET['get_id'])){
                     <!-- //<td>< $row['d_id']?></td> -->
                         <td><?= $row['tt_id']?></td>
                         <td><?= $row['type_tt']?></td>
+                        <td><?= $row['type_tt_desc']?></td>
                         <td>
                             <a href="create_tarif_type.php?get_id=<?= $row["tt_id"]?>" class="btn btn-info"><i class="fas fa-edit"></i></a>
                             <button  data-href="?delete_id=<?=$row["tt_id"]?>" data-toggle="modal" data-target="#confirm-delete"  class="btn btn-danger"><i class="fas fa-trash"></i></button>

@@ -8,7 +8,7 @@ require_once 'dompdf/autoload.inc.php';
 include '../config.php';
 if(isset($_GET['get_id'])){
     $pid=$_GET['get_id'];
-
+$pdfType = $_GET['type'] ?? 'billing'; // default billing
     $sql="SELECT 
 
     passenger.date_de_prise_en_charge,
@@ -67,9 +67,12 @@ if(isset($_GET['get_id'])){
 
 //   $url = 'http://localhost/pcl_admin/pcl_admins/admin/pdf_print?get_id=' . urlencode($pid);
 
+//   $url = 'http://localhost/pcl_admin/pcl_admins/admin/pdf_print?get_id=' . urlencode($pid) . '&type=' . urlencode($pdfType);
 
 
-$url = 'https://booking.pariscablimousine.com/admin/pdf_print?get_id='. urlencode($pid);
+
+
+$url = 'https://booking.pariscablimousine.com/admin/pdf_print?get_id='. urlencode($pid) . '&type=' . urlencode($pdfType);
 
 
 // Fetch the contents of the URL

@@ -21,6 +21,7 @@ if(isset($_GET['get_id'])){
     users_desc.user_description,
     passenger.Tarif,
     tarif_type.type_tt,
+    tarif_type.type_tt_desc,
     select_an_option_desc.tm_id,
     type_mission.type_m,
     option_tel.op_tel_desc,
@@ -76,6 +77,7 @@ WHERE passenger.p_id =$pid";
           $cha_d=$row['chauffeur_desc'];
           $Tarif=$row['Tarif'];
           $type_tt=$row['type_tt'];
+          $type_tt_desc=$row['type_tt_desc'];
           $tm_id=$row['tm_id'];
           $type_m=$row['type_m'];
           $op_tel_desc=$row['op_tel_desc'];
@@ -309,6 +311,7 @@ if ($result1 && mysqli_num_rows($result1) == 1) {
     $ud = $row['user_description'];
 }
 ?>
+                    <?php if (!isset($_GET['type']) || $_GET['type'] != 'passenger') { ?>
                     <tr>
                     <th scope="row">Chauffeur</th>
                     <td><?php echo $username;?> | <?php echo $phone;?>
@@ -316,6 +319,8 @@ if ($result1 && mysqli_num_rows($result1) == 1) {
                     <?php echo nl2br($ud);?>
                     </td>
                     </tr>
+                    <?php } ?>
+
                     <tr>
                     <th scope="row">Véhicule</th>
                     <td><?php echo $Vehicule_num;?></td>
@@ -326,11 +331,11 @@ if ($result1 && mysqli_num_rows($result1) == 1) {
                         <?php echo '€ '.$Tarif;?> | <?php echo $type_tt;?> 
 
                     <?php
-                    if($users_id == 4){
+                    if($type_tt_desc == "No" || $type_tt_desc == " "){
                         // echo "hi";
 
                     }else{
-                         echo '<br>'.$user_desc;
+                         echo '<br>'.$type_tt_desc;
                     }
                     ?>
                     </td>
