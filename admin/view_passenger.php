@@ -382,7 +382,7 @@ function setPDFId(pid) {
 // Passenger PDF
 document.getElementById('passengerBtn').addEventListener('click', function() {
     if (selectedPid) {
-        window.open(`print_invoice1.php?get_id=${selectedPid}&type=passenger`, '_blank');
+        window.open(`print_invoice1?get_id=${selectedPid}&type=passenger`, '_blank');
         $('#modal-pdf').modal('hide');
     }
 });
@@ -390,7 +390,7 @@ document.getElementById('passengerBtn').addEventListener('click', function() {
 // Billing PDF
 document.getElementById('billingBtn').addEventListener('click', function() {
     if (selectedPid) {
-        window.open(`print_invoice1.php?get_id=${selectedPid}&type=billing`, '_blank');
+        window.open(`print_invoice1?get_id=${selectedPid}&type=billing`, '_blank');
         $('#modal-pdf').modal('hide');
     }
 });
@@ -465,13 +465,13 @@ document.getElementById('billingBtn').addEventListener('click', function() {
 
   <?php
   // Set current system date & time as default
-  $current_date2 = date('Y-m-d');
+  $current_d2 = date('Y-m-d');
   $current_time = date('H:i');
   ?>
 
   <!-- Date & time inputs (hidden initially, shown after selecting status) -->
   <input type="date" name="status_date" class="form-control form-control-sm status-date" 
-         value="<?= $current_date2 ?>" style="display:none;" required>
+         value="<?= $current_d2 ?>" style="display:none;" required>
   <input type="time" name="status_time" class="form-control form-control-sm status-time" 
          value="<?= $current_time ?>" style="display:none;" required>
 
