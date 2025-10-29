@@ -67,12 +67,12 @@ $pdfType = $_GET['type'] ?? 'billing'; // default billing
 
 //   $url = 'http://localhost/pcl_admin/pcl_admins/admin/pdf_print?get_id=' . urlencode($pid);
 
-//   $url = 'http://localhost/pcl_admin/pcl_admins/admin/pdf_print?get_id=' . urlencode($pid) . '&type=' . urlencode($pdfType);
+  $url = 'http://localhost/pcl_admin/pcl_admins/admin/pdf_print?get_id=' . urlencode($pid) . '&type=' . urlencode($pdfType);
 
 
 
 
-$url = 'https://booking.pariscablimousine.com/admin/pdf_print?get_id='. urlencode($pid) . '&type=' . urlencode($pdfType);
+// $url = 'https://booking.pariscablimousine.com/admin/pdf_print?get_id='. urlencode($pid) . '&type=' . urlencode($pdfType);
 
 
 // Fetch the contents of the URL

@@ -187,10 +187,10 @@ $result = mysqli_query($con, $query);
 if ($result) {
     $previous_date = null;
     while ($row = mysqli_fetch_assoc($result)) {
-        $current_dd = $row['formatted_date'];
+        $current_date = $row['formatted_date'];
         
         // If the date changes, start a new table
-        if ($current_dd !== $previous_date) {
+        if ($current_date !== $previous_date) {
             if ($previous_date !== null) {
                 echo "</table>"; // Close previous table
                 ?>
@@ -218,7 +218,7 @@ if ($result) {
           <div class="col-12">
             <div class="card">
               <div class="card-header" style="background-color:#f4f6f9">
-                <h2 class="card-title"><?php echo "$current_dd"; ?></h2>
+                <h2 class="card-title"><?php echo "$current_date"; ?></h2>
               </div>
 
               <div class="card-body">
@@ -514,7 +514,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     
                   
         <?php
-        $previous_date = $current_dd;
+        $previous_date = $current_date;
     }
     
     // Close the last table
