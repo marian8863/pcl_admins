@@ -347,7 +347,8 @@ if ($result) {
    <i class="fas fa-download"></i>
 </a>
 
-<!-- ✅ Modal (AdminLTE / Bootstrap 4 style) -->
+
+<!-- ✅ Single Reusable PDF Modal -->
 <div class="modal fade" id="modal-pdf">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -376,26 +377,36 @@ if ($result) {
 <script>
 let selectedPid = null;
 
+// Called when clicking the green download button
 function setPDFId(pid) {
-    selectedPid = pid;
+  selectedPid = pid;
 }
 
-// Passenger PDF
-document.getElementById('passengerBtn').addEventListener('click', function() {
-    if (selectedPid) {
-        window.open(`print_invoice1.php?get_id=${selectedPid}&type=passenger`, '_blank');
-        $('#modal-pdf').modal('hide');
-    }
-});
+// One global listener for both buttons
+document.addEventListener("DOMContentLoaded", () => {
+  const passengerBtn = document.getElementById("passengerBtn");
+  const billingBtn = document.getElementById("billingBtn");
 
-// Billing PDF
-document.getElementById('billingBtn').addEventListener('click', function() {
+  passengerBtn.addEventListener("click", () => {
     if (selectedPid) {
-        window.open(`print_invoice1.php?get_id=${selectedPid}&type=billing`, '_blank');
-        $('#modal-pdf').modal('hide');
+      const url = `print_invoice1.php?get_id=${selectedPid}&type=passenger`;
+      window.open(url, "_blank");
+      $("#modal-pdf").modal("hide");
     }
+  });
+
+  billingBtn.addEventListener("click", () => {
+    if (selectedPid) {
+      const url = `print_invoice1.php?get_id=${selectedPid}&type=billing`;
+      window.open(url, "_blank");
+      $("#modal-pdf").modal("hide");
+    }
+  });
 });
 </script>
+
+
+
 
 
  
