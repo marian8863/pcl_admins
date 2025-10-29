@@ -169,6 +169,7 @@ $query = "
 SELECT
     p.p_id,
     p.passager_principal,
+      p.date_de_prise_en_charge,
     DATE_FORMAT(p.date_de_prise_en_charge, '%d-%b,%Y') AS formatted_date,
     p.Time,
     tm.type_m,
@@ -453,7 +454,9 @@ document.getElementById('billingBtn').addEventListener('click', function() {
 
   <?php if (!empty($remaining)): ?>
     <!-- Show dropdown only if some statuses remain -->
-<form method="post" style="margin:6px 0; display:flex; flex-wrap:wrap; gap:6px;" class="status-form">
+<form method="post" style="margin:6px 0; display:flex; flex-wrap:wrap; gap:6px;" 
+      class="status-form"
+      data-ride-date="<?= htmlspecialchars(date('Y-m-d', strtotime($row['date_de_prise_en_charge']))) ?>">
   <input type="hidden" name="p_id" value="<?= $row['p_id'] ?>">
 
   <select name="status" class="form-control form-control-sm status-select" required>
@@ -463,17 +466,10 @@ document.getElementById('billingBtn').addEventListener('click', function() {
     <?php endforeach; ?>
   </select>
 
-  <?php
-  // Set current system date & time as default
-  $current_date = date('Y-m-d');
-  $current_time = date('H:i');
-  ?>
-
-  <!-- Date & time inputs (hidden initially, shown after selecting status) -->
-  <input type="date" name="status_date" class="form-control form-control-sm status-date" 
-         value="<?= $current_date ?>" style="display:none;" required>
+  <!-- Date & time inputs (hidden initially) -->
+  <input type="date" name="status_date" class="form-control form-control-sm status-date" style="display:none;" required>
   <input type="time" name="status_time" class="form-control form-control-sm status-time" 
-         value="<?= $current_time ?>" style="display:none;" required>
+         value="<?= date('H:i') ?>" style="display:none;" required>
 
   <button type="submit" name="update_status" class="btn btn-sm btn-warning">Update</button>
 </form>
@@ -484,15 +480,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const select = form.querySelector(".status-select");
     const dateInput = form.querySelector(".status-date");
     const timeInput = form.querySelector(".status-time");
+    const bookingDate = form.dataset.rideDate;
 
     select.addEventListener("change", () => {
-      // Show date & time fields only after selecting a status
+      // Show inputs when a status is selected
       dateInput.style.display = "block";
       timeInput.style.display = "block";
+
+      // ✅ Fill the date input with booking date if valid
+      if (bookingDate && !dateInput.value) {
+        dateInput.value = bookingDate;
+      }
     });
   });
 });
 </script>
+
+
 
   <?php endif; ?>
 
