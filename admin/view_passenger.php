@@ -465,13 +465,13 @@ document.getElementById('billingBtn').addEventListener('click', function() {
 
   <?php
   // Set current system date & time as default
-  $current_date = date('Y-m-d');
+  $current_date2 = date('Y-m-d');
   $current_time = date('H:i');
   ?>
 
   <!-- Date & time inputs (hidden initially, shown after selecting status) -->
   <input type="date" name="status_date" class="form-control form-control-sm status-date" 
-         value="<?= $current_date ?>" style="display:none;" required>
+         value="<?= $current_date2 ?>" style="display:none;" required>
   <input type="time" name="status_time" class="form-control form-control-sm status-time" 
          value="<?= $current_time ?>" style="display:none;" required>
 

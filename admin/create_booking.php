@@ -437,58 +437,6 @@ if ($result && mysqli_num_rows($result) == 1) {
   </div>
 </div>
 
-<script>
-  function toggleExtra(selectEl, textareaId) {
-    const textarea = document.getElementById(textareaId);
-    if (selectEl.value) {
-      textarea.classList.remove("hidden");
-      if (selectEl.value === "others") {
-        textarea.setAttribute("required", "required");
-      } else {
-        textarea.removeAttribute("required");
-      }
-    } else {
-      textarea.classList.add("hidden");
-      textarea.removeAttribute("required");
-    }
-  }
-
-  document.getElementById('pickup_location').addEventListener('change', function () {
-    toggleExtra(this, 'pickup_desc');
-    syncDropdowns();
-  });
-
-  document.getElementById('dropoff_location').addEventListener('change', function () {
-    toggleExtra(this, 'dropoff_desc');
-    syncDropdowns();
-  });
-
-  function syncDropdowns() {
-    const pickupSelect = document.getElementById('pickup_location');
-    const dropoffSelect = document.getElementById('dropoff_location');
-    const selectedPickup = pickupSelect.value;
-    const selectedDropoff = dropoffSelect.value;
-
-    for (let option of dropoffSelect.options) {
-      if (option.value && option.value !== "others") {
-        option.disabled = (option.value === selectedPickup);
-        option.classList.toggle("text-muted", option.disabled);
-      }
-    }
-    for (let option of pickupSelect.options) {
-      if (option.value && option.value !== "others") {
-        option.disabled = (option.value === selectedDropoff);
-        option.classList.toggle("text-muted", option.disabled);
-      }
-    }
-  }
-
-  window.addEventListener('DOMContentLoaded', function() {
-    toggleExtra(document.getElementById('pickup_location'), 'pickup_desc');
-    toggleExtra(document.getElementById('dropoff_location'), 'dropoff_desc');
-    syncDropdowns();
-  });
-</script>
 
 <style>
   .hidden {
