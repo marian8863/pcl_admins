@@ -35,7 +35,7 @@ $required_menu_name = 'view_passenger'; // ✅ MUST be defined before include
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         <div>
           <button type="button" class="btn btn-info" id="passengerBtn">Passenger</button>
-          <button type="button" class="btn btn-success" id="billingBtn">Billing</button>
+          <button type="button" class="btn btn-success" id="billingBtn">Driver</button>
           <button type="button" class="btn btn-primary" id="invoiceBtn">Invoice</button>
         </div>
       </div>
