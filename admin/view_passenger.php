@@ -193,12 +193,12 @@ document.addEventListener("DOMContentLoaded", () => {
   .then(res => res.json())
   .then(data => {
     if (data.success) {
-      Swal.fire({
-        icon: "success",
-        title: "Invoice saved!",
-        timer: 1200,
-        showConfirmButton: false
-      });
+      // Swal.fire({
+      //   icon: "success",
+      //   title: "Invoice saved!",
+      //   timer: 1200,
+      //   showConfirmButton: false
+      // });
 
       // After saving → open invoice PDF in new tab
       // const url = `invoice_pdf?get_id=${selectedPid}&type=invoice`;
