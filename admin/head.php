@@ -138,3 +138,8 @@ else{
   
 <div class="wrapper">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
+
+ <script>
+// ✅ Function to recalculate invoice totals
+
+</script>

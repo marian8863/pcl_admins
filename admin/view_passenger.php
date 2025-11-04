@@ -16,7 +16,208 @@ $required_menu_name = 'view_passenger'; // ✅ MUST be defined before include
 
 ?>
 <!--END DON'T CHANGE THE ORDER-->
+<!-- ✅ Single Reusable PDF Modal -->
+<div class="modal fade" id="modal-pdf">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h4 class="modal-title">Choose PDF Type</h4>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
 
+      <div class="modal-body text-center">
+        <p>Select the type of PDF you want to generate:</p>
+      </div>
+
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <div>
+          <button type="button" class="btn btn-info" id="passengerBtn">Passenger</button>
+          <button type="button" class="btn btn-success" id="billingBtn">Billing</button>
+          <button type="button" class="btn btn-primary" id="invoiceBtn">Invoice</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedPid = null;
+
+// Called when clicking the green download button
+function setPDFId(pid) {
+  selectedPid = pid;
+}
+
+// One global listener for both buttons
+document.addEventListener("DOMContentLoaded", () => {
+  const passengerBtn = document.getElementById("passengerBtn");
+  const billingBtn = document.getElementById("billingBtn");
+  // const invoiceBtn = document.getElementById("invoiceBtn");
+
+  passengerBtn.addEventListener("click", () => {
+    if (selectedPid) {
+      const url = `print_invoice1.php?get_id=${selectedPid}&type=passenger`;
+      window.open(url, "_blank");
+      $("#modal-pdf").modal("hide");
+    }
+  });
+
+  billingBtn.addEventListener("click", () => {
+    if (selectedPid) {
+      const url = `print_invoice1.php?get_id=${selectedPid}&type=billing`;
+      window.open(url, "_blank");
+      $("#modal-pdf").modal("hide");
+    }
+  });
+//   invoiceBtn.addEventListener("click", () => {
+//   if (selectedPid) {
+//     const url = `invoice_pdf?get_id=${selectedPid}&type=invoice`;
+//     window.open(url, "_blank");
+//     $("#modal-pdf").modal("hide");
+//   }
+// });
+});
+</script>
+<!-- ✅ Invoice Modal -->
+<div class="modal fade" id="modal-invoice">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h4 class="modal-title">Invoice Details</h4>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form id="invoiceForm">
+          <!-- 1️⃣ Company Name -->
+          <div class="form-group">
+            <label>Do you have a company name?</label><br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="has_company" id="companyYes" value="yes">
+              <label class="form-check-label" for="companyYes">Yes</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="has_company" id="companyNo" value="no" checked>
+              <label class="form-check-label" for="companyNo">No</label>
+            </div>
+          </div>
+
+          <div class="form-group" id="companyNameGroup" style="display:none;">
+            <label for="companyName">Company Name</label>
+            <input type="text" class="form-control" id="companyName" name="company_name" placeholder="Enter company name">
+          </div>
+
+          <!-- 2️⃣ Quantity -->
+          <div class="form-group">
+            <label for="qty">Quantity (QTY)</label>
+            <input type="number" class="form-control" id="qty" name="qty" min="1" value="1" required>
+          </div>
+
+          <!-- 3️⃣ Unit Price -->
+          <div class="form-group">
+            <label for="unitPrice">Unit Price (HT)</label>
+            <input type="text" class="form-control" id="unitPrice" name="unit_price" required>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="generateInvoiceBtn">Generate Invoice</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+  const invoiceBtn = document.getElementById("invoiceBtn");
+
+  invoiceBtn.addEventListener("click", () => {
+    if (selectedPid) {
+      // ✅ Close the "Choose PDF Type" modal
+      $("#modal-pdf").modal("hide");
+
+      // ✅ Fetch Tarif from PHP (using data-* attribute)
+      const tarifValue = document.querySelector(`[data-pid='${selectedPid}']`)?.dataset.tarif || '';
+
+      // ✅ Prefill unit price field
+      document.getElementById("unitPrice").value = tarifValue;
+
+      // ✅ Show the new "Invoice" modal
+      setTimeout(() => {
+        $("#modal-invoice").modal("show");
+      }, 300);
+    }
+  });
+
+  // ✅ Toggle company name input
+  document.querySelectorAll("input[name='has_company']").forEach((radio) => {
+    radio.addEventListener("change", (e) => {
+      const group = document.getElementById("companyNameGroup");
+      if (e.target.value === "yes") {
+        group.style.display = "block";
+      } else {
+        group.style.display = "none";
+      }
+    });
+  });
+
+  // ✅ Handle Generate Invoice click
+  document.getElementById("generateInvoiceBtn").addEventListener("click", () => {
+    const form = document.getElementById("invoiceForm");
+    const formData = new FormData(form);
+    const params = new URLSearchParams(formData).toString();
+
+    // Open invoice generation in a new tab
+    // window.open(`invoice_pdf?get_id=${selectedPid}&type=invoice&${params}`, "_blank");
+
+    // Close modal
+    $("#modal-invoice").modal("hide");
+  });
+
+  document.getElementById("generateInvoiceBtn").addEventListener("click", () => {
+  const form = document.getElementById("invoiceForm");
+  const formData = new FormData(form);
+  formData.append("p_id", selectedPid);
+
+  fetch("save_invoice", {
+    method: "POST",
+    body: formData,
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      Swal.fire({
+        icon: "success",
+        title: "Invoice saved!",
+        timer: 1200,
+        showConfirmButton: false
+      });
+
+      // After saving → open invoice PDF in new tab
+      // const url = `invoice_pdf?get_id=${selectedPid}&type=invoice`;
+      // window.open(url, "_blank");
+      const url = `invoice_pdf?get_id=${selectedPid}&invoice_id=${data.invoice_id}&type=invoice`;
+      window.open(url, '_blank');
+      $("#modal-invoice").modal("hide");
+    } else {
+      Swal.fire({ icon: "error", title: "Error saving invoice", text: data.message });
+    }
+  })
+  .catch(err => {
+    Swal.fire({ icon: "error", title: "Error", text: err });
+  });
+});
+
+});
+
+</script>
 
 
 
@@ -165,23 +366,90 @@ if ($user_type === 'driver') {
 
 // admin and ADM → see everything, so no condition needed
 
-$query = "
-SELECT
-    p.p_id,
-    p.passager_principal,
-      p.date_de_prise_en_charge,
-    DATE_FORMAT(p.date_de_prise_en_charge, '%d-%b,%Y') AS formatted_date,
-    p.Time,
-    tm.type_m,
-    u.username,
-    p.user_id AS current_user_id
-FROM passenger p
-JOIN type_mission tm ON p.tm_id = tm.tm_id
-LEFT JOIN users u ON p.user_id = u.id
-WHERE p.Create_job_action = 'created' $extra_condition
-ORDER BY p.date_de_prise_en_charge, p.Time
+$query = "SELECT 
+    passenger.p_id,
+    passenger.passager_principal,
+    passenger.date_de_prise_en_charge,
+    passenger.Time,
+    passenger.pickup_location,
+    passenger.dropoff_location,
+    pickup.name  AS pickup_adr,
+    dropoff.name AS dropoff_adr,
+    passenger.nb_de_passager,
+    passenger.user_id as current_user_id,
+    passenger.chauffeur_desc,
+    users.id AS user_id_ref,
+    users.username,
+    users.phone,
+    users.email,
+    users.user_desc,
+    users_desc.user_description,
+    passenger.Tarif,
+    tarif_type.type_tt,
+    tarif_type.type_tt_desc,
+    select_an_option_desc.tm_id,
+    type_mission.type_m,
+    option_tel.op_tel_desc,
+    option_tel.op_tel_question,
+    vehicule.Vehicule_num,
+    type_de_mission_desc.type_desc,
+    type_de_mission_desc.select_quesntion,
+    passenger_description.passenger_select_desc,
+    passenger_description.passenger_select_quesntion,
+    option_desc.op_desc,
+    option_desc.op_question,
+    select_an_option_desc.tm_desc,
+    who_give_booking.wg_desc,
+    who_give_booking.wg_question,
+    passenger_pickup_desc.ppd_desc,
+    passenger_pickup_desc.ppd_question,
+    passenger_dropoff_desc.pdd_desc,
+    passenger_dropoff_desc.pdd_question,
+    DATE_FORMAT(passenger.date_de_prise_en_charge, '%d-%b,%Y') AS formatted_date
+FROM passenger
+JOIN option_tel             ON passenger.p_id = option_tel.p_id
+JOIN vehicule               ON vehicule.v_id = passenger.Vehicule_num
+JOIN type_mission           ON type_mission.tm_id = passenger.tm_id
+JOIN type_de_mission_desc   ON type_de_mission_desc.p_id = passenger.p_id
+JOIN passenger_description  ON passenger_description.p_id = passenger.p_id
+JOIN users                  ON users.id = passenger.user_id
+JOIN users_desc             ON users.user_desc = users_desc.user_desc
+JOIN tarif_type             ON tarif_type.tt_id = passenger.tt_id
+JOIN option_desc            ON option_desc.p_id = passenger.p_id
+JOIN select_an_option_desc  ON select_an_option_desc.p_id = passenger.p_id
+JOIN who_give_booking       ON passenger.p_id = who_give_booking.p_id
+JOIN passenger_pickup_desc  ON passenger_pickup_desc.p_id = passenger.p_id
+JOIN passenger_dropoff_desc ON passenger_dropoff_desc.p_id = passenger.p_id
+LEFT JOIN flight_locations pickup  
+       ON passenger.pickup_location = pickup.id
+LEFT JOIN flight_locations dropoff 
+       ON passenger.dropoff_location = dropoff.id
+WHERE passenger.Create_job_action = 'created' $extra_condition
+ORDER BY passenger.date_de_prise_en_charge, passenger.Time
 ";
 $result = mysqli_query($con, $query);
+
+ $passager_principal=$row['passager_principal'];
+          $date_de_prise_en_charge=$row['date_de_prise_en_charge'];
+          $Time=$row['Time'];
+
+          if ($row['pickup_location'] === 'others') {
+    $pickup_location = 'Others';
+} else {
+    $pickup_location = $row['pickup_adr'];
+}
+
+// dropoff
+if ($row['dropoff_location'] === 'others') {
+    $dropoff_location = 'Others';
+} else {
+    $dropoff_location = $row['dropoff_adr'];
+}
+
+        $ppd_desc     = $row['ppd_desc'];
+        $ppd_question = $row['ppd_question'];
+        $pdd_desc     = $row['pdd_desc'];
+        $pdd_question = $row['pdd_question'];
 
 
 
@@ -343,71 +611,11 @@ if ($result) {
    onclick="setPDFId(<?= $row['p_id'] ?>)" 
    class="btn btn-success" 
    data-toggle="modal" 
-   data-target="#modal-pdf">
+   data-target="#modal-pdf"
+   data-pid="<?= $row['p_id'] ?>"
+   data-tarif="<?= htmlspecialchars($row['Tarif']) ?>">
    <i class="fas fa-download"></i>
 </a>
-
-
-<!-- ✅ Single Reusable PDF Modal -->
-<div class="modal fade" id="modal-pdf">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-dark text-white">
-        <h4 class="modal-title">Choose PDF Type</h4>
-        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body text-center">
-        <p>Select the type of PDF you want to generate:</p>
-      </div>
-
-      <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <div>
-          <button type="button" class="btn btn-info" id="passengerBtn">Passenger</button>
-          <button type="button" class="btn btn-success" id="billingBtn">Billing</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-let selectedPid = null;
-
-// Called when clicking the green download button
-function setPDFId(pid) {
-  selectedPid = pid;
-}
-
-// One global listener for both buttons
-document.addEventListener("DOMContentLoaded", () => {
-  const passengerBtn = document.getElementById("passengerBtn");
-  const billingBtn = document.getElementById("billingBtn");
-
-  passengerBtn.addEventListener("click", () => {
-    if (selectedPid) {
-      const url = `print_invoice1.php?get_id=${selectedPid}&type=passenger`;
-      window.open(url, "_blank");
-      $("#modal-pdf").modal("hide");
-    }
-  });
-
-  billingBtn.addEventListener("click", () => {
-    if (selectedPid) {
-      const url = `print_invoice1.php?get_id=${selectedPid}&type=billing`;
-      window.open(url, "_blank");
-      $("#modal-pdf").modal("hide");
-    }
-  });
-});
-</script>
-
-
-
-
 
  
                           <?php endif; ?>
