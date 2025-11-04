@@ -105,7 +105,6 @@ th { background: #f2f2f2; }
     <?php if ($client_name) { ?>
         <b>Client:</b> <?php echo htmlspecialchars($client_name); ?><br>
     <?php } ?>
-    <b>Service:</b> <?php echo htmlspecialchars($pickup_location); ?> >>> <?php echo htmlspecialchars($dropoff_location); ?><br>
 </div>
 
 <h2 style="text-align:center;">INVOICE</h2>
