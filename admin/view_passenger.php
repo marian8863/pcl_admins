@@ -193,15 +193,18 @@ document.addEventListener("DOMContentLoaded", () => {
   .then(res => res.json())
   .then(data => {
     if (data.success) {
-      // Open the HTML invoice template in a new tab
-      // const url = `http://localhost/pcl_admin/pcl_admins/admin/invoice_pdf?get_id=${selectedPid}&invoice_id=${data.invoice_id}`;
-            const url = `https://booking.pariscablimousine.com/admin/invoice_pdf?get_id=${selectedPid}&invoice_id=${data.invoice_id}`;
+      Swal.fire({
+        icon: "success",
+        title: "Invoice saved!",
+        timer: 1200,
+        showConfirmButton: false
+      });
 
-
-
+      // After saving → open invoice PDF in new tab
+      // const url = `invoice_pdf?get_id=${selectedPid}&type=invoice`;
+      // window.open(url, "_blank");
+           const url = `https://booking.pariscablimousine.com/admin/invoice_pdf?get_id=${selectedPid}&invoice_id=${data.invoice_id}`;
       window.open(url, '_blank');
-
-      // Close modal
       $("#modal-invoice").modal("hide");
     } else {
       Swal.fire({ icon: "error", title: "Error saving invoice", text: data.message });
@@ -211,7 +214,6 @@ document.addEventListener("DOMContentLoaded", () => {
     Swal.fire({ icon: "error", title: "Error", text: err });
   });
 });
-
 
 });
 
