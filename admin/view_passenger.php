@@ -203,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // After saving → open invoice PDF in new tab
       // const url = `invoice_pdf?get_id=${selectedPid}&type=invoice`;
       // window.open(url, "_blank");
-           const url = `https://booking.pariscablimousine.com/admin/invoice_pdf?get_id=${selectedPid}&invoice_id=${data.invoice_id}`;
+           const url = `invoice_pdf?get_id=${selectedPid}&invoice_id=${data.invoice_id}`;
       window.open(url, '_blank');
       $("#modal-invoice").modal("hide");
     } else {
