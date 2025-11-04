@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // const url = `invoice_pdf?get_id=${selectedPid}&type=invoice`;
       // window.open(url, "_blank");
            const url = `invoice_pdf?get_id=${selectedPid}&invoice_id=${data.invoice_id}`;
-      window.open(url, '_blank');
+      window.open(url, "_blank");
       $("#modal-invoice").modal("hide");
     } else {
       Swal.fire({ icon: "error", title: "Error saving invoice", text: data.message });
