@@ -28,15 +28,54 @@ while ($row = $result->fetch_assoc()) {
 
 if(isset($_GET['get_id'])){
   $pid=$_GET['get_id'];
-  $sql="SELECT DISTINCT  passenger.passager_principal,passenger.date_de_prise_en_charge,passenger.Time,passenger.pickup_location,tarif_type.type_tt,tarif_type.tt_id,passenger.dropoff_location,
-  passenger.nb_de_passager,passenger.user_id,passenger.Vehicule_num,passenger.chauffeur_desc,passenger.Tarif,passenger.tm_id,option_desc.op_desc,option_desc.op_question,passenger_description.passenger_select_quesntion,
-  passenger_description.passenger_select_desc,passenger_pickup_desc.ppd_desc,passenger_pickup_desc.ppd_question,passenger_dropoff_desc.pdd_desc,passenger_dropoff_desc.pdd_question,type_de_mission_desc.type_desc,type_de_mission_desc.select_quesntion,users.username,users.phone,type_mission.type_m,option_tel.op_tel_question,option_tel.op_tel_desc,select_an_option_desc.tm_desc,who_give_booking.wg_desc,who_give_booking.wg_question
-  
-  from passenger ,option_desc,passenger_description,passenger_pickup_desc, passenger_dropoff_desc,type_de_mission_desc,users,type_mission,option_tel,select_an_option_desc,tarif_type,who_give_booking,users_desc
-  
-  WHERE passenger.p_id=option_desc.p_id and passenger.p_id=passenger_description.p_id and passenger.p_id=passenger_pickup_desc.p_id and passenger.p_id=passenger_dropoff_desc.p_id and passenger.p_id=type_de_mission_desc.p_id and passenger.tm_id=type_mission.tm_id and passenger.user_id=users.id and  passenger.p_id=option_tel.p_id and passenger.tm_id=select_an_option_desc.tm_id and passenger.p_id=select_an_option_desc.p_id and passenger.tt_id=tarif_type.tt_id and passenger.p_id=who_give_booking.p_id and 
-
-  passenger.p_id=$pid";
+  $sql="SELECT DISTINCT 
+    p.passager_principal,
+    p.date_de_prise_en_charge,
+    p.Time,
+    p.pickup_location,
+    tt.type_tt,
+    tt.tt_id,
+    p.dropoff_location,
+    p.nb_de_passager,
+    p.user_id,
+    p.Vehicule_num,
+    p.chauffeur_desc,
+    p.Tarif,
+    p.tm_id,
+    od.op_desc,
+    od.op_question,
+    pd.passenger_select_quesntion,
+    pd.passenger_select_desc,
+    ppd.ppd_desc,
+    ppd.ppd_question,
+    pdd.pdd_desc,
+    pdd.pdd_question,
+    tmd.type_desc,
+    tmd.select_quesntion,
+    u.username,
+    u.phone,
+    tm.type_m,
+    ot.op_tel_question,
+    ot.op_tel_desc,
+    sao.tm_desc,
+    wgb.wg_desc,
+    wgb.wg_question
+FROM passenger p
+JOIN option_desc od ON p.p_id = od.p_id
+JOIN passenger_description pd ON p.p_id = pd.p_id
+JOIN passenger_pickup_desc ppd ON p.p_id = ppd.p_id
+JOIN passenger_dropoff_desc pdd ON p.p_id = pdd.p_id
+JOIN type_de_mission_desc tmd ON p.p_id = tmd.p_id
+JOIN users u ON p.user_id = u.id
+JOIN type_mission tm ON p.tm_id = tm.tm_id
+JOIN option_tel ot ON p.p_id = ot.p_id
+JOIN select_an_option_desc sao ON p.p_id = sao.p_id 
+JOIN tarif_type tt ON p.tt_id = tt.tt_id
+JOIN who_give_booking wgb ON p.p_id = wgb.p_id
+-- add this only if needed:
+-- JOIN users_desc ud ON u.id = ud.user_id
+WHERE p.p_id = $pid;
+";
     $result = mysqli_query($con,$sql);
     if(mysqli_num_rows($result)==1) {       
         $row=mysqli_fetch_assoc($result);
