@@ -664,28 +664,39 @@ $percent = intval(($done / $total) * 100);
 <small><?= $percent ?>% completed</small>
 
 <?php if (!empty($remaining)): ?>
-<form method="post" class="status-form"
-      data-ride-date="<?= htmlspecialchars(date('Y-m-d', strtotime($row['date_de_prise_en_charge']))) ?>"
-      data-pid="<?= $row['p_id'] ?>"
-      style="margin:6px 0; display:flex; flex-wrap:wrap; gap:6px; align-items:flex-start;">
-
+<!-- Status Form -->
+<form method="post" class="status-form" data-ride-date="<?= htmlspecialchars(date('Y-m-d', strtotime($row['date_de_prise_en_charge']))) ?>">
   <input type="hidden" name="p_id" value="<?= $row['p_id'] ?>">
-
-  <select name="status" class="form-control form-control-sm status-select" required style="flex:1 1 150px; min-width:150px;">
+  <select name="status" class="form-control form-control-sm status-select" required>
     <option disabled selected>-- select status --</option>
     <?php foreach ($remaining as $st): ?>
       <option value="<?= $st ?>"><?= ucwords($st) ?></option>
     <?php endforeach; ?>
   </select>
-
-  <!-- Desktop inline date/time -->
-  <div class="status-datetime" style="height:0; opacity:0; overflow:hidden; transition:all 0.3s; flex:1 1 150px; min-width:150px;">
-    <input type="date" name="status_date" class="form-control form-control-sm mb-1" required>
-    <input type="time" name="status_time" class="form-control form-control-sm" value="<?= date('H:i') ?>" required>
-  </div>
-
-  <button type="submit" name="update_status" class="btn btn-sm btn-warning" style="flex:0 0 auto;">Update</button>
 </form>
+
+
+
+<script>
+$(document).ready(function() {
+    $('.status-select').on('change', function() {
+        var form = $(this).closest('.status-form');
+        var bookingDate = form.data('ride-date');
+        var p_id = form.find('input[name="p_id"]').val();
+        var status = $(this).val();
+
+        $('#modal_p_id').val(p_id);
+        $('#modal_status').val(status);
+
+        if (bookingDate) $('#status_date').val(bookingDate);
+        var time = new Date();
+        $('#status_time').val(time.getHours().toString().padStart(2,'0') + ':' + time.getMinutes().toString().padStart(2,'0'));
+
+        $('#statusModal').modal('show');
+    });
+});
+</script>
+
 <?php endif; ?>
 
 <!-- Completed status list -->
@@ -747,92 +758,41 @@ mysqli_close($con);
     <!-- /.content -->
   </div>
 
- 
-  <!-- /.content-wrapper -->
 
   <!-- /.content-wrapper -->
 
-
-<div class="modal fade" id="mobileStatusModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <!-- /.content-wrapper -->
+<!-- Modal -->
+<div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Update Status</h5>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" id="mobilePid">
-        <label for="mobileStatusSelect">Status</label>
-        <select id="mobileStatusSelect" class="form-control mb-2"></select>
-        <label for="mobileStatusDate">Date</label>
-        <input type="date" id="mobileStatusDate" class="form-control mb-2">
-        <label for="mobileStatusTime">Time</label>
-        <input type="time" id="mobileStatusTime" class="form-control">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="mobileStatusSave">Update</button>
-      </div>
+      <form method="post" id="modalStatusForm">
+        <div class="modal-header">
+          <h5 class="modal-title">Update Status</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="p_id" id="modal_p_id">
+          <input type="hidden" name="status" id="modal_status">
+
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" name="status_date" id="status_date" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Time</label>
+            <input type="time" name="status_time" id="status_time" class="form-control" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" name="update_status" class="btn btn-warning">Update</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
 
-<!--BLOCK#2 end YOUR CODE HERE -->
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-  document.querySelectorAll(".status-form").forEach(form => {
-    const select = form.querySelector(".status-select");
-    const dtContainer = form.querySelector(".status-datetime");
-    const dateInput = dtContainer.querySelector("input[type='date']");
-    const timeInput = dtContainer.querySelector("input[type='time']");
-    const bookingDate = form.dataset.rideDate;
-    const pid = form.dataset.pid;
-
-    select.addEventListener("change", () => {
-      if (isMobile) {
-        // Mobile modal
-        const mobileSelect = document.getElementById("mobileStatusSelect");
-        const mobileDate = document.getElementById("mobileStatusDate");
-        const mobileTime = document.getElementById("mobileStatusTime");
-        const mobilePid = document.getElementById("mobilePid");
-
-        mobilePid.value = pid;
-        mobileSelect.innerHTML = ""; 
-        Array.from(select.options).forEach(opt => {
-          if (opt.value) mobileSelect.add(new Option(opt.text, opt.value));
-        });
-
-        mobileDate.value = bookingDate;
-        mobileTime.value = new Date().toLocaleTimeString('en-GB', {hour: '2-digit', minute:'2-digit'});
-
-        $("#mobileStatusModal").modal("show");
-      } else {
-        // Desktop inline
-        dtContainer.style.height = "auto";
-        dtContainer.style.opacity = "1";
-        dtContainer.style.overflow = "visible";
-
-        if (bookingDate && !dateInput.value) dateInput.value = bookingDate;
-      }
-    });
-  });
-
-  // Mobile modal save
-  document.getElementById("mobileStatusSave").addEventListener("click", () => {
-    const mobilePid = document.getElementById("mobilePid").value;
-    const mobileForm = document.querySelector(`.status-form[data-pid='${mobilePid}']`);
-
-    mobileForm.querySelector("select.status-select").value = document.getElementById("mobileStatusSelect").value;
-    mobileForm.querySelector("input[name='status_date']").value = document.getElementById("mobileStatusDate").value;
-    mobileForm.querySelector("input[name='status_time']").value = document.getElementById("mobileStatusTime").value;
-
-    $("#mobileStatusModal").modal("hide");
-    mobileForm.submit();
-  });
-});
-
-</script>
 
 <!--BLOCK#3 START DON'T CHANGE THE ORDER-->
 <?php include_once("footer.php"); ?>
