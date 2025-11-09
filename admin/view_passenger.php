@@ -681,20 +681,33 @@ $percent = intval(($done / $total) * 100);
 $(document).ready(function() {
     $('.status-select').on('change', function() {
         var form = $(this).closest('.status-form');
-        var bookingDate = form.data('ride-date');
+        var bookingDate = form.data('ride-date'); // get ride date
         var p_id = form.find('input[name="p_id"]').val();
         var status = $(this).val();
 
+        // Set hidden inputs in modal
         $('#modal_p_id').val(p_id);
         $('#modal_status').val(status);
 
-        if (bookingDate) $('#status_date').val(bookingDate);
-        var time = new Date();
-        $('#status_time').val(time.getHours().toString().padStart(2,'0') + ':' + time.getMinutes().toString().padStart(2,'0'));
+        // ✅ Set date picker to booking date if available
+        if (bookingDate) {
+            $('#status_date').val(bookingDate);
+        } else {
+            // fallback to today
+            var today = new Date().toISOString().slice(0,10);
+            $('#status_date').val(today);
+        }
 
+        // Set time picker to current time
+        var now = new Date();
+        var timeStr = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+        $('#status_time').val(timeStr);
+
+        // Show modal
         $('#statusModal').modal('show');
     });
 });
+
 </script>
 
 <?php endif; ?>
