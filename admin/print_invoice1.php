@@ -31,7 +31,7 @@ if(isset($_GET['get_id'])){
     ob_start();
     $_GET['get_id'] = $pid;    // simulate GET variable for pdf_print
     $_GET['type'] = $pdfType;  // simulate type
-    include 'pdf_print.php';   // your existing PDF HTML template
+    include 'pdf_print';   // your existing PDF HTML template
     $html = ob_get_clean();
 
     // Initialize DOMPDF
