@@ -631,105 +631,75 @@ if ($result) {
                    
 
  <?php if (in_array($user_type, ['admin', 'ADM','driver'])): ?>
-                    <td>
-  <?php
-  // fetch status history for this ride
-  $history = [];
-  $hsql = "SELECT status, DATE_FORMAT(updated_at, '%d-%b %Y %H:%i') AS status_time
-           FROM ride_status_history 
-           WHERE p_id = ".$row['p_id']."
-           ORDER BY updated_at ASC";
-  $hres = $con->query($hsql);
-  if ($hres) {
-      while ($hrow = $hres->fetch_assoc()) {
-          $history[$hrow['status']] = $hrow['status_time'];
-      }
-  }
+                  <td>
+<?php
+// fetch status history for this ride
+$history = [];
+$hsql = "SELECT status, DATE_FORMAT(updated_at, '%d-%b %Y %H:%i') AS status_time
+         FROM ride_status_history 
+         WHERE p_id = ".$row['p_id']."
+         ORDER BY updated_at ASC";
+$hres = $con->query($hsql);
+if ($hres) {
+    while ($hrow = $hres->fetch_assoc()) {
+        $history[$hrow['status']] = $hrow['status_time'];
+    }
+}
 
-  // all possible statuses
-  $statuses = ["On the way","On Site","On Board","Ride Completed"];
+// all possible statuses
+$statuses = ["On the way","On Site","On Board","Ride Completed"];
+$remaining = array_diff($statuses, array_keys($history));
+$total = count($statuses);
+$done  = count($history);
+$percent = intval(($done / $total) * 100);
+?>
 
-  // find remaining statuses not yet set
-  $remaining = array_diff($statuses, array_keys($history));
-
-  // progress calculation
-  $total = count($statuses);
-  $done  = count($history);
-  $percent = intval(($done / $total) * 100);
-  ?>
-
-  <!-- Progress bar -->
-  <div class="progress mb-2" style="height: 10px;">
-    <div class="progress-bar 
-        <?= $percent == 100 ? 'bg-success' : 'bg-info' ?>" 
-        role="progressbar" 
-        style="width: <?= $percent ?>%;" 
-        aria-valuenow="<?= $percent ?>" 
-        aria-valuemin="0" 
-        aria-valuemax="100">
-    </div>
+<!-- Progress bar -->
+<div class="progress mb-2" style="height: 10px;">
+  <div class="progress-bar <?= $percent == 100 ? 'bg-success' : 'bg-info' ?>" 
+       role="progressbar" style="width: <?= $percent ?>%;" 
+       aria-valuenow="<?= $percent ?>" aria-valuemin="0" aria-valuemax="100">
   </div>
-  <small><?= $percent ?>% completed</small>
+</div>
+<small><?= $percent ?>% completed</small>
 
-  <?php if (!empty($remaining)): ?>
-    <!-- Show dropdown only if some statuses remain -->
-<form method="post" style="margin:6px 0; display:flex; flex-wrap:wrap; gap:6px;" 
-      class="status-form"
-      data-ride-date="<?= htmlspecialchars(date('Y-m-d', strtotime($row['date_de_prise_en_charge']))) ?>">
+<?php if (!empty($remaining)): ?>
+<form method="post" class="status-form"
+      data-ride-date="<?= htmlspecialchars(date('Y-m-d', strtotime($row['date_de_prise_en_charge']))) ?>"
+      data-pid="<?= $row['p_id'] ?>"
+      style="margin:6px 0; display:flex; flex-wrap:wrap; gap:6px; align-items:flex-start;">
+
   <input type="hidden" name="p_id" value="<?= $row['p_id'] ?>">
 
-  <select name="status" class="form-control form-control-sm status-select" required>
+  <select name="status" class="form-control form-control-sm status-select" required style="flex:1 1 150px; min-width:150px;">
     <option disabled selected>-- select status --</option>
     <?php foreach ($remaining as $st): ?>
       <option value="<?= $st ?>"><?= ucwords($st) ?></option>
     <?php endforeach; ?>
   </select>
 
-  <!-- Date & time inputs (hidden initially) -->
-  <input type="date" name="status_date" class="form-control form-control-sm status-date" style="display:none;" required>
-  <input type="time" name="status_time" class="form-control form-control-sm status-time" 
-         value="<?= date('H:i') ?>" style="display:none;" required>
+  <!-- Desktop inline date/time -->
+  <div class="status-datetime" style="height:0; opacity:0; overflow:hidden; transition:all 0.3s; flex:1 1 150px; min-width:150px;">
+    <input type="date" name="status_date" class="form-control form-control-sm mb-1" required>
+    <input type="time" name="status_time" class="form-control form-control-sm" value="<?= date('H:i') ?>" required>
+  </div>
 
-  <button type="submit" name="update_status" class="btn btn-sm btn-warning">Update</button>
+  <button type="submit" name="update_status" class="btn btn-sm btn-warning" style="flex:0 0 auto;">Update</button>
 </form>
+<?php endif; ?>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".status-form").forEach(form => {
-    const select = form.querySelector(".status-select");
-    const dateInput = form.querySelector(".status-date");
-    const timeInput = form.querySelector(".status-time");
-    const bookingDate = form.dataset.rideDate;
-
-    select.addEventListener("change", () => {
-      // Show inputs when a status is selected
-      dateInput.style.display = "block";
-      timeInput.style.display = "block";
-
-      // ✅ Fill the date input with booking date if valid
-      if (bookingDate && !dateInput.value) {
-        dateInput.value = bookingDate;
-      }
-    });
-  });
-});
-</script>
-
-
-
-  <?php endif; ?>
-
-  <!-- Show completed statuses -->
-  <?php if (!empty($history)): ?>
-    <ul style="margin:0; padding-left:15px; font-size:12px; color:#555;">
-      <?php foreach ($statuses as $st): ?>
-        <?php if (isset($history[$st])): ?>
-          <li><b><?= ucwords($st) ?>:</b> <?= $history[$st] ?></li>
-        <?php endif; ?>
-      <?php endforeach; ?>
-    </ul>
-  <?php endif; ?>
+<!-- Completed status list -->
+<?php if (!empty($history)): ?>
+<ul style="margin:0; padding-left:15px; font-size:12px; color:#555;">
+  <?php foreach ($statuses as $st): ?>
+    <?php if (isset($history[$st])): ?>
+      <li><b><?= ucwords($st) ?>:</b> <?= $history[$st] ?></li>
+    <?php endif; ?>
+  <?php endforeach; ?>
+</ul>
+<?php endif; ?>
 </td>
+
 
 <?php endif; ?>
 
@@ -783,9 +753,86 @@ mysqli_close($con);
   <!-- /.content-wrapper -->
 
 
+<div class="modal fade" id="mobileStatusModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Update Status</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="mobilePid">
+        <label for="mobileStatusSelect">Status</label>
+        <select id="mobileStatusSelect" class="form-control mb-2"></select>
+        <label for="mobileStatusDate">Date</label>
+        <input type="date" id="mobileStatusDate" class="form-control mb-2">
+        <label for="mobileStatusTime">Time</label>
+        <input type="time" id="mobileStatusTime" class="form-control">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="mobileStatusSave">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!--BLOCK#2 end YOUR CODE HERE -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
+  document.querySelectorAll(".status-form").forEach(form => {
+    const select = form.querySelector(".status-select");
+    const dtContainer = form.querySelector(".status-datetime");
+    const dateInput = dtContainer.querySelector("input[type='date']");
+    const timeInput = dtContainer.querySelector("input[type='time']");
+    const bookingDate = form.dataset.rideDate;
+    const pid = form.dataset.pid;
+
+    select.addEventListener("change", () => {
+      if (isMobile) {
+        // Mobile modal
+        const mobileSelect = document.getElementById("mobileStatusSelect");
+        const mobileDate = document.getElementById("mobileStatusDate");
+        const mobileTime = document.getElementById("mobileStatusTime");
+        const mobilePid = document.getElementById("mobilePid");
+
+        mobilePid.value = pid;
+        mobileSelect.innerHTML = ""; 
+        Array.from(select.options).forEach(opt => {
+          if (opt.value) mobileSelect.add(new Option(opt.text, opt.value));
+        });
+
+        mobileDate.value = bookingDate;
+        mobileTime.value = new Date().toLocaleTimeString('en-GB', {hour: '2-digit', minute:'2-digit'});
+
+        $("#mobileStatusModal").modal("show");
+      } else {
+        // Desktop inline
+        dtContainer.style.height = "auto";
+        dtContainer.style.opacity = "1";
+        dtContainer.style.overflow = "visible";
+
+        if (bookingDate && !dateInput.value) dateInput.value = bookingDate;
+      }
+    });
+  });
+
+  // Mobile modal save
+  document.getElementById("mobileStatusSave").addEventListener("click", () => {
+    const mobilePid = document.getElementById("mobilePid").value;
+    const mobileForm = document.querySelector(`.status-form[data-pid='${mobilePid}']`);
+
+    mobileForm.querySelector("select.status-select").value = document.getElementById("mobileStatusSelect").value;
+    mobileForm.querySelector("input[name='status_date']").value = document.getElementById("mobileStatusDate").value;
+    mobileForm.querySelector("input[name='status_time']").value = document.getElementById("mobileStatusTime").value;
+
+    $("#mobileStatusModal").modal("hide");
+    mobileForm.submit();
+  });
+});
+
+</script>
 
 <!--BLOCK#3 START DON'T CHANGE THE ORDER-->
 <?php include_once("footer.php"); ?>

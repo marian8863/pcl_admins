@@ -98,7 +98,7 @@ $html = file_get_contents($url);
     $dompdf->render();
 
     // Output the generated PDF (1 = download and 0 = preview) 
-    $dompdf->stream('('.$date_de_prise_en_charge.') -'.$type_m ,  array("Attachment" => 1));exit;
+    $dompdf->stream('('.$date_de_prise_en_charge.') -'.$type_m ,  array("Attachment" => 0));exit;
 
 
 ?>
