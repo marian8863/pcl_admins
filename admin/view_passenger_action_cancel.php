@@ -30,12 +30,12 @@ $required_menu_name = 'view_passenger_action_cancel'; // ✅ MUST be defined bef
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Jobs Completed Detail</h1>
+            <h1 class="m-0 text-dark">Cancel Jobs</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Jobs Completed Detail
+              <li class="breadcrumb-item active">Cancel Jobs
               <?php
                   // echo  $Sdate = new DateTime("now", new DateTimeZone('Asia/Colombo'));
                  // date_default_timezone_set('Asia/Colombo');
