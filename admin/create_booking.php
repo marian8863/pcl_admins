@@ -624,9 +624,9 @@ if ($result && mysqli_num_rows($result) == 1) {
                     <div class="col-sm-3">
                       <!-- text input -->
                       <div class="form-group">
-                        <label>Tarif Type</label>
+                        <label>Modes de Paiement</label>
                         <select class="form-control Vehicule_select" style="width: 100%;" name="Tarif_Types" id="vidx" value="<?php if(isset($_GET['get_id'])){ echo $tti;}?>" >
-                        <option  selected disabled >---- Modes de paiement ---- </option>
+                        <option  selected disabled >---- Select the Type ---- </option>
                         <?php
                         $sql="select * from `tarif_type`";
                         $result = mysqli_query($con,$sql);
