@@ -61,8 +61,6 @@ $qty = (int)$invoice['qty'];
 
 $date_de_prise_en_charge = $passenger['date_de_prise_en_charge'];
 $Time = $passenger['Time'];
-
-// --- Output HTML ---
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,35 +68,50 @@ $Time = $passenger['Time'];
 <meta charset="UTF-8">
 <title>Invoice Template</title>
 <style>
-body { font-family: DejaVu Sans, sans-serif; font-size: 12px; color: #000; }
-.header {  margin-bottom: 20px; }
+body { font-family: DejaVu Sans, sans-serif; font-size: 12px; color: #000; margin: 0; padding-bottom: 60px; }
+.header { margin-bottom: 20px; }
 .logo img { width: 130px; margin-bottom: 5px; }
-.company-info { line-height: 1.5;  }
+.company-info { line-height: 1.5; }
 .company-info .name { font-size: 15px; font-weight: bold; }
 .client-info { margin-top: 10px; margin-bottom: 25px; line-height: 1.4; }
 table { border-collapse: collapse; width: 100%; margin-top: 10px; }
 th, td { border: 1px solid #000; padding: 6px; text-align: center; font-size: 10px; }
 th { background: #f2f2f2; }
 .no-border td { border: none; text-align: right; font-weight: bold; padding-right: 10px; font-size: 10px; }
-.footer { text-align: center; font-size: 11px; margin-top: 40px; color: #555; }
+.footer {
+    position: fixed;
+    bottom: 70px;
+    left: 0;
+    right: 0;
+    text-align: left;
+    font-size: 10px;
+    color: #444;
+    line-height: 1.4;
+}
+
 </style>
+
 </head>
 <body>
 
 <div class="header">
-    <div class="logo">
-        <img src="dist/img/logo_pdf.png" alt="Paris Cab Limousine Logo">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="logo">
+            <img src="dist/img/logo_pdf.png" alt="Paris Cab Limousine Logo">
+        </div>
+        <div class="invoice-title" style="text-align: right;">
+            <h2 style="margin: 0;">INVOICE : PCL-<?php echo $invoice_id; ?></h2>
+        </div>
     </div>
-    <div class="company-info">
+    <div class="company-info" style="margin-top: 10px;">
         <div class="name">Paris Cab Limousine</div>
         44 Avenue Albert Sarraut<br>
         95190 GOUSSAINVILLE, France<br>
         Tel: +336 660 763 235<br>
         Email: pariscablimo@gmail.com<br>
-        Siret: 84005602200014 - APE: 4932Z<br>
-        TVA: FR20840056022 - Capital: 1,500.00 €<br>
     </div>
 </div>
+
 
 <div class="client-info">
     <b>Company:</b> <?php echo htmlspecialchars($passager_principal); ?><br>
@@ -107,7 +120,6 @@ th { background: #f2f2f2; }
     <?php } ?>
 </div>
 
-<h2 style="text-align:center;">INVOICE</h2>
 
 <table>
     <tr>
@@ -144,8 +156,13 @@ th { background: #f2f2f2; }
 </table>
 
 <div class="footer">
-    Thank you for your business — Paris Cab Limousine
+    <div style="font-size: 12px; inportant">Thank you for your business — Paris Cab Limousine</div>
+
+    <div >
+        Escompte pour règlement anticipé : 0% En cas de retard de paiement, une pénalité égale à 3 fois le taux d'intérêt légal sera exigible (Décret 2009-138 du 9 février 2009).Pour les professionnels, une indemnité minimum forfaitaire de 40 euros pour frais de recouvrement sera exigible (Décret 2012-1115 du 9 octobre 2012).Siret : 84005602200014 - APE : 4932Z - N° TVA intracom : FR20840056022 - Capital : 1 500,00 €
+    </div>
 </div>
+
 
 </body>
 </html>
