@@ -353,16 +353,16 @@ if (isset($_POST['update_driver'])) {
 $user_type = $_SESSION['user']['user_type'] ?? '';
 $logged_user_id = $_SESSION['user']['id'] ?? 0;
 
-$extra_condition = "";
+// $extra_condition = "";
 
-// Restrict query based on role
-if ($user_type === 'driver') {
-    // Driver sees his own rides + user_id 53
-    $extra_condition = " AND (p.user_id = " . (int)$logged_user_id . " OR p.user_id = 50)";
-} elseif ($user_type === 'user_enties') {
-    // Normal user sees only his own rides + user_id 53
-    $extra_condition = " AND (p.user_id = " . (int)$logged_user_id . " OR p.user_id = 50)";
-}
+// // Restrict query based on role
+// if ($user_type === 'driver') {
+//     // Driver sees his own rides + user_id 53
+//     $extra_condition = " AND (p.user_id = " . (int)$logged_user_id . " OR p.user_id = 50)";
+// } elseif ($user_type === 'user_enties') {
+//     // Normal user sees only his own rides + user_id 53
+//     $extra_condition = " AND (p.user_id = " . (int)$logged_user_id . " OR p.user_id = 50)";
+// }
 
 // admin and ADM → see everything, so no condition needed
 
