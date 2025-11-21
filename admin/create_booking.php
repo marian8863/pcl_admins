@@ -811,40 +811,45 @@ if(isset($_POST['add'])){
 
 // passenger desc
 if($id !=0){
-if($_POST['passenger_select_quesntion'] == 'pdesc'){
-  if(!empty($_POST['passenger_select_quesntion']) && !empty($_POST['passenger_select_desc'])){
+if ($_POST['passenger_select_quesntion'] == 'pdesc') {
 
-  $passenger_select_quesntion=$_POST['passenger_select_quesntion'];
-  $passenger_select_desc=$_POST['passenger_select_desc'];
+    if (!empty($_POST['passenger_select_quesntion']) && !empty($_POST['passenger_select_desc'])) {
 
-  $sql="INSERT INTO `passenger_description` (`p_id`,`passenger_select_quesntion`,`passenger_select_desc`) 
-  values('$id','$passenger_select_quesntion','$passenger_select_desc')";
-  if(mysqli_query($con,$sql)){
-      //$message ="<h5>New record created successfully</h5>";
+        $passenger_select_quesntion = $_POST['passenger_select_quesntion'];
+        $passenger_select_desc      = $_POST['passenger_select_desc'];
 
-  }else{
-      echo "Error :-".$sql.
-    "<br>"  .mysqli_error($con);
-  }
+        $sql = "INSERT INTO passenger_description 
+                (p_id, passenger_select_quesntion, passenger_select_desc)
+                VALUES (?, ?, ?)";
+
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "iss", $id, $passenger_select_quesntion, $passenger_select_desc);
+
+        if (!mysqli_stmt_execute($stmt)) {
+            echo "Error: " . mysqli_error($con);
+        }
+    }
+
+} else if ($_POST['passenger_select_quesntion'] == 'Nopdesc') {
+
+    if (!empty($_POST['passenger_select_quesntion'])) {
+
+        $passenger_select_quesntion = $_POST['passenger_select_quesntion'];
+        $passenger_select_desc      = "Nopdesc";
+
+        $sql = "INSERT INTO passenger_description 
+                (p_id, passenger_select_quesntion, passenger_select_desc)
+                VALUES (?, ?, ?)";
+
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "iss", $id, $passenger_select_quesntion, $passenger_select_desc);
+
+        if (!mysqli_stmt_execute($stmt)) {
+            echo "Error: " . mysqli_error($con);
+        }
+    }
 }
 
-}else if($_POST['passenger_select_quesntion'] == 'Nopdesc'){
-if(!empty($_POST['passenger_select_quesntion'])){
-
-$passenger_select_quesntion=$_POST['passenger_select_quesntion'];
-
-$sql="INSERT INTO `passenger_description` (`p_id`,`passenger_select_quesntion`,`passenger_select_desc`) 
-values('$id','$passenger_select_quesntion','Nopdesc')";
-if(mysqli_query($con,$sql)){
-    //$message ="<h5>New record created successfully</h5>";
-
-}else{
-    echo "Error :-".$sql.
-  "<br>"  .mysqli_error($con);
-}
-}
-
-} 
 
 
 //option_desc            
@@ -881,106 +886,127 @@ if(mysqli_query($con,$sql)){
     }}
 
     //type_de_mission_desc
-if($_POST['select_quesntion'] == 'desc'){
-  if(!empty($_POST['type_desc']) && !empty($_POST['select_quesntion'])){
+if ($_POST['select_quesntion'] == 'desc') {
 
-  $type_desc=$_POST['type_desc'];
-  $select_quesntion=$_POST['select_quesntion'];
+    if (!empty($_POST['type_desc']) && !empty($_POST['select_quesntion'])) {
 
-  $sql="INSERT INTO `type_de_mission_desc` (`type_desc`,`select_quesntion`,`p_id`) 
-  values('$type_desc','$select_quesntion','$id')";
-  if(mysqli_query($con,$sql)){
-      //$message ="<h5>New record created successfully</h5>";
-  }else{
-    echo "Error :-".$sql.
-  "<br>"  .mysqli_error($con);
-  }
+        $type_desc        = $_POST['type_desc'];
+        $select_quesntion = $_POST['select_quesntion'];
 
-  }
-}else if($_POST['select_quesntion'] == 'Nodesc'){
-if(!empty($_POST['select_quesntion'])){
+        $sql = "INSERT INTO type_de_mission_desc (type_desc, select_quesntion, p_id)
+                VALUES (?, ?, ?)";
 
-$select_quesntion=$_POST['select_quesntion'];
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "ssi", $type_desc, $select_quesntion, $id);
 
-$sql="INSERT INTO `type_de_mission_desc` (`type_desc`,`select_quesntion`,`p_id`) 
-values('Nodesc','$select_quesntion','$id')";
-if(mysqli_query($con,$sql)){
-    //$message ="<h5>New record created successfully</h5>";
-}else{
-  echo "Error :-".$sql.
-"<br>"  .mysqli_error($con);
+        if (!mysqli_stmt_execute($stmt)) {
+            echo "Error: " . mysqli_error($con);
+        }
+    }
+
+} else if ($_POST['select_quesntion'] == 'Nodesc') {
+
+    if (!empty($_POST['select_quesntion'])) {
+
+        $select_quesntion = $_POST['select_quesntion'];
+        $type_desc        = "Nodesc";
+
+        $sql = "INSERT INTO type_de_mission_desc (type_desc, select_quesntion, p_id)
+                VALUES (?, ?, ?)";
+
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "ssi", $type_desc, $select_quesntion, $id);
+
+        if (!mysqli_stmt_execute($stmt)) {
+            echo "Error: " . mysqli_error($con);
+        }
+    }
 }
 
-}
-}
 
 
                    // <!--  passenger pickup desc text area -->          
-    if($_POST['ppd_question'] == 'ppdOption'){
-      if(!empty($_POST['ppd_desc']) && !empty($_POST['ppd_question'])){
+if ($_POST['ppd_question'] === 'ppdOption') {
 
-      $ppd_desc=$_POST['ppd_desc'];
-      $ppd_question=$_POST['ppd_question'];
+    if (!empty($_POST['ppd_desc']) && !empty($_POST['ppd_question'])) {
 
-      $sql="INSERT INTO `passenger_pickup_desc` (`p_id`,`ppd_desc`,`ppd_question`) 
-      values('$id','$ppd_desc','$ppd_question')";
-      if(mysqli_query($con,$sql)){
-          $message ="<h5>New record created successfully option</h5>";
-          echo $message;
-      }else{
-        echo "Error :-".$sql.
-      "<br>"  .mysqli_error($con);
-      }
+        $ppd_desc = $_POST['ppd_desc'];
+        $ppd_question = $_POST['ppd_question'];
 
-    }}else if($_POST['ppd_question'] == 'No_ppdOption'){
-      if(!empty($_POST['ppd_question'])){
+        $sql = "INSERT INTO passenger_pickup_desc (p_id, ppd_desc, ppd_question)
+                VALUES (?, ?, ?)";
 
-      $ppd_question=$_POST['ppd_question'];
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "iss", $id, $ppd_desc, $ppd_question);
 
-      $sql="INSERT INTO `passenger_pickup_desc` (`p_id`,`ppd_desc`,`ppd_question`)  
-      values('$id','No_ppdOption','$ppd_question')";
-      if(mysqli_query($con,$sql)){
-          //$message ="<h5>New record created successfully</h5>";
-      }else{
-        echo "Error :-".$sql.
-      "<br>"  .mysqli_error($con);
-      }
+        if (mysqli_stmt_execute($stmt)) {
+            echo "<h5>New record created successfully option</h5>";
+        } else {
+            echo "Error: " . mysqli_error($con);
+        }
+    }
 
-    }}
+} else if ($_POST['ppd_question'] === 'No_ppdOption') {
+
+    if (!empty($_POST['ppd_question'])) {
+
+        $ppd_question = $_POST['ppd_question'];
+        $ppd_desc = "No_ppdOption";
+
+        $sql = "INSERT INTO passenger_pickup_desc (p_id, ppd_desc, ppd_question)
+                VALUES (?, ?, ?)";
+
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "iss", $id, $ppd_desc, $ppd_question);
+
+        if (!mysqli_stmt_execute($stmt)) {
+            echo "Error: " . mysqli_error($con);
+        }
+    }
+}
+
 
 
                        // <!--  passenger Dropoff desc text area -->          
-    if($_POST['pdd_question'] == 'pddOption'){
-      if(!empty($_POST['pdd_desc']) && !empty($_POST['pdd_question'])){
+if ($_POST['pdd_question'] == 'pddOption') {
 
-      $pdd_desc=$_POST['pdd_desc'];
-      $pdd_question=$_POST['pdd_question'];
+    if (!empty($_POST['pdd_desc']) && !empty($_POST['pdd_question'])) {
 
-      $sql="INSERT INTO `passenger_dropoff_desc` (`p_id`,`pdd_desc`,`pdd_question`) 
-      values('$id','$pdd_desc','$pdd_question')";
-      if(mysqli_query($con,$sql)){
-          $message ="<h5>New record created successfully option</h5>";
-          echo $message;
-      }else{
-        echo "Error :-".$sql.
-      "<br>"  .mysqli_error($con);
-      }
+        $pdd_desc     = $_POST['pdd_desc'];
+        $pdd_question = $_POST['pdd_question'];
 
-    }}else if($_POST['pdd_question'] == 'No_pddOption'){
-      if(!empty($_POST['pdd_question'])){
+        $sql = "INSERT INTO passenger_dropoff_desc (p_id, pdd_desc, pdd_question)
+                VALUES (?, ?, ?)";
 
-      $pdd_question=$_POST['pdd_question'];
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "iss", $id, $pdd_desc, $pdd_question);
 
-      $sql="INSERT INTO `passenger_dropoff_desc` (`p_id`,`pdd_desc`,`pdd_question`)  
-      values('$id','No_pddOption','$pdd_question')";
-      if(mysqli_query($con,$sql)){
-          //$message ="<h5>New record created successfully</h5>";
-      }else{
-        echo "Error :-".$sql.
-      "<br>"  .mysqli_error($con);
-      }
+        if (mysqli_stmt_execute($stmt)) {
+            echo "<h5>New record created successfully option</h5>";
+        } else {
+            echo "Error: " . mysqli_error($con);
+        }
+    }
 
-    }}
+} else if ($_POST['pdd_question'] == 'No_pddOption') {
+
+    if (!empty($_POST['pdd_question'])) {
+
+        $pdd_question = $_POST['pdd_question'];
+        $pdd_desc     = "No_pddOption";
+
+        $sql = "INSERT INTO passenger_dropoff_desc (p_id, pdd_desc, pdd_question)
+                VALUES (?, ?, ?)";
+
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "iss", $id, $pdd_desc, $pdd_question);
+
+        if (!mysqli_stmt_execute($stmt)) {
+            echo "Error: " . mysqli_error($con);
+        }
+    }
+}
+
 
 
 
@@ -1294,125 +1320,131 @@ if($_POST['c_num'] == 'c_on'){
 
 
 //type_de_mission_desc
-if($_POST['select_quesntion'] == 'desc'){
-  if(!empty($_POST['type_desc']) && !empty($_POST['select_quesntion'])){
+if ($_POST['select_quesntion'] == 'desc') {
 
-  $type_desc=$_POST['type_desc'];
-  $select_quesntion=$_POST['select_quesntion'];
+    if (!empty($_POST['type_desc']) && !empty($_POST['select_quesntion'])) {
 
-  $sql='UPDATE  `type_de_mission_desc` set 
-  `type_desc` ="'.$type_desc.'",
-  `select_quesntion`="'.$select_quesntion.'"
+        $type_desc        = $_POST['type_desc'];
+        $select_quesntion = $_POST['select_quesntion'];
 
-  where `p_id`="'.$pid.'"';
-  if(mysqli_query($con,$sql)){
-      //$message ="<h5>New record created successfully</h5>";
-  }else{
-    echo "Error :-".$sql.
-  "<br>"  .mysqli_error($con);
-  }
+        $sql = "UPDATE type_de_mission_desc
+                SET type_desc = ?, select_quesntion = ?
+                WHERE p_id = ?";
 
-  }
-}else if($_POST['select_quesntion'] == 'Nodesc'){
-if(!empty($_POST['select_quesntion'])){
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "ssi", $type_desc, $select_quesntion, $pid);
 
-$select_quesntion=$_POST['select_quesntion'];
+        if (!mysqli_stmt_execute($stmt)) {
+            echo "Error: " . mysqli_error($con);
+        }
+    }
 
-$sql='UPDATE  `type_de_mission_desc` set 
-`type_desc` ="Nodesc",
-`select_quesntion`="'.$select_quesntion.'"
+} else if ($_POST['select_quesntion'] == 'Nodesc') {
 
-where `p_id`="'.$pid.'"';
-if(mysqli_query($con,$sql)){
-    //$message ="<h5>New record created successfully</h5>";
-}else{
-  echo "Error :-".$sql.
-"<br>"  .mysqli_error($con);
+    if (!empty($_POST['select_quesntion'])) {
+
+        $select_quesntion = $_POST['select_quesntion'];
+        $type_desc        = "Nodesc";
+
+        $sql = "UPDATE type_de_mission_desc
+                SET type_desc = ?, select_quesntion = ?
+                WHERE p_id = ?";
+
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "ssi", $type_desc, $select_quesntion, $pid);
+
+        if (!mysqli_stmt_execute($stmt)) {
+            echo "Error: " . mysqli_error($con);
+        }
+    }
 }
 
-}}
 
 
     
  // <!--  passenger pickup desc text area -->            
-if($_POST['ppd_question'] == 'ppdOption'){
-  if(!empty($_POST['ppd_desc']) && !empty($_POST['ppd_question'])){
+if ($_POST['ppd_question'] == 'ppdOption') {
 
-  $ppd_desc=$_POST['ppd_desc'];
-  $ppd_question=$_POST['ppd_question'];
+    if (!empty($_POST['ppd_desc']) && !empty($_POST['ppd_question'])) {
 
-  $sql='UPDATE  `passenger_pickup_desc` set 
-  `ppd_desc` ="'.$ppd_desc.'",
-  `ppd_question`="'.$ppd_question.'"
-  
-  where `p_id`="'.$pid.'"';
-  if(mysqli_query($con,$sql)){
-      //$message ="<h5>New record created successfully</h5>";
+        $ppd_desc     = $_POST['ppd_desc'];
+        $ppd_question = $_POST['ppd_question'];
 
-  }else{
-    echo "Error :-".$sql.
-  "<br>"  .mysqli_error($con);
-  }
+        $sql = "UPDATE passenger_pickup_desc 
+                SET ppd_desc = ?, ppd_question = ?
+                WHERE p_id = ?";
 
-}}else if($_POST['ppd_question'] == 'No_ppdOption'){
-  if(!empty($_POST['ppd_question'])){
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "ssi", $ppd_desc, $ppd_question, $pid);
 
-  $ppd_question=$_POST['ppd_question'];
+        if (!mysqli_stmt_execute($stmt)) {
+            echo "Error: " . mysqli_error($con);
+        }
+    }
 
-  $sql='UPDATE  `passenger_pickup_desc` set 
-  `ppd_desc` = "No_ppdOption",
-  `ppd_question`="'.$ppd_question.'"
-  
-  where `p_id`="'.$pid.'"';
-  if(mysqli_query($con,$sql)){
-      //$message ="<h5>New record created successfully</h5>";
-  }else{
-    echo "Error :-".$sql.
-  "<br>"  .mysqli_error($con);
-  }
+} else if ($_POST['ppd_question'] == 'No_ppdOption') {
 
-}}
+    if (!empty($_POST['ppd_question'])) {
+
+        $ppd_question = $_POST['ppd_question'];
+        $ppd_desc     = "No_ppdOption";
+
+        $sql = "UPDATE passenger_pickup_desc 
+                SET ppd_desc = ?, ppd_question = ?
+                WHERE p_id = ?";
+
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "ssi", $ppd_desc, $ppd_question, $pid);
+
+        if (!mysqli_stmt_execute($stmt)) {
+            echo "Error: " . mysqli_error($con);
+        }
+    }
+}
+
 
 
         
  // <!--  passenger dropoff desc text area -->            
-if($_POST['pdd_question'] == 'pddOption'){
-  if(!empty($_POST['pdd_desc']) && !empty($_POST['pdd_question'])){
+if ($_POST['pdd_question'] == 'pddOption') {
 
-  $pdd_desc=$_POST['pdd_desc'];
-  $pdd_question=$_POST['pdd_question'];
+    if (!empty($_POST['pdd_desc']) && !empty($_POST['pdd_question'])) {
 
-  $sql='UPDATE  `passenger_dropoff_desc` set 
-  `pdd_desc` ="'.$pdd_desc.'",
-  `pdd_question`="'.$pdd_question.'"
-  
-  where `p_id`="'.$pid.'"';
-  if(mysqli_query($con,$sql)){
-      //$message ="<h5>New record created successfully</h5>";
+        $pdd_desc     = $_POST['pdd_desc'];
+        $pdd_question = $_POST['pdd_question'];
 
-  }else{
-    echo "Error :-".$sql.
-  "<br>"  .mysqli_error($con);
-  }
+        $sql = "UPDATE passenger_dropoff_desc 
+                SET pdd_desc = ?, pdd_question = ?
+                WHERE p_id = ?";
 
-}}else if($_POST['pdd_question'] == 'No_pddOption'){
-  if(!empty($_POST['pdd_question'])){
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "ssi", $pdd_desc, $pdd_question, $pid);
 
-  $pdd_question=$_POST['pdd_question'];
+        if (!mysqli_stmt_execute($stmt)) {
+            echo "Error: " . mysqli_error($con);
+        }
+    }
 
-  $sql='UPDATE  `passenger_dropoff_desc` set 
-  `pdd_desc` = "No_pddOption",
-  `pdd_question`="'.$pdd_question.'"
-  
-  where `p_id`="'.$pid.'"';
-  if(mysqli_query($con,$sql)){
-      //$message ="<h5>New record created successfully</h5>";
-  }else{
-    echo "Error :-".$sql.
-  "<br>"  .mysqli_error($con);
-  }
+} else if ($_POST['pdd_question'] == 'No_pddOption') {
 
-}}
+    if (!empty($_POST['pdd_question'])) {
+
+        $pdd_question = $_POST['pdd_question'];
+        $pdd_desc     = "No_pddOption";
+
+        $sql = "UPDATE passenger_dropoff_desc 
+                SET pdd_desc = ?, pdd_question = ?
+                WHERE p_id = ?";
+
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "ssi", $pdd_desc, $pdd_question, $pid);
+
+        if (!mysqli_stmt_execute($stmt)) {
+            echo "Error: " . mysqli_error($con);
+        }
+    }
+}
+
 
 
 
