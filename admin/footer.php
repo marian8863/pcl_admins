@@ -153,6 +153,8 @@ $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href
       "info": true,
       "autoWidth": false,
       "responsive": true,
+        // ⭐ Order by 2nd column (index 1)
+  "order": [[1, "asc"]]
     });
 
 
