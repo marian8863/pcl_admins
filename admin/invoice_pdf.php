@@ -66,7 +66,7 @@ $dompdf->render();
 // exit;
 
 list($hour, $minute) = explode(':', $Time);
-$formattedTime = ltrim($hour, '0') . 'h' . $minute . 'min';
+$formattedTime = ltrim($hour, '0') . 'h' . $minute;
 
 
 $filename = 'INVOICE(' . $date_de_prise_en_charge . ') - '  . $formattedTime ;

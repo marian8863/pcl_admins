@@ -104,7 +104,7 @@ $html = file_get_contents($url);
     // $dompdf->stream('('.$date_de_prise_en_charge.') -'.$type_m ,  array("Attachment" => 0));exit;
 // Convert SQL time "HH:MM:SS" → "4h15min"
 list($hour, $minute) = explode(':', $Time);
-$formattedTime = ltrim($hour, '0') . 'h' . $minute . 'min';
+$formattedTime = ltrim($hour, '0') . 'h' . $minute ;
 
 
 $filename = '(' . $date_de_prise_en_charge . ') - ' . $type_m . ' - ' . $formattedTime . ' - ' . $wg_desc;
