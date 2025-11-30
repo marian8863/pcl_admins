@@ -102,10 +102,14 @@ $html = file_get_contents($url);
 
     // Output the generated PDF (1 = download and 0 = preview) 
     // $dompdf->stream('('.$date_de_prise_en_charge.') -'.$type_m ,  array("Attachment" => 0));exit;
+// Convert SQL time "HH:MM:SS" → "4h15min"
+list($hour, $minute) = explode(':', $Time);
+$formattedTime = ltrim($hour, '0') . 'h' . $minute . 'min';
 
 
-$filename = '(' . $date_de_prise_en_charge . ') - ' . $type_m . ' - ' . $Time . ' - ' . $wg_desc;
-$filename = preg_replace('/[^A-Za-z0-9\-\(\)\s]/', '', $filename); // remove special chars
+$filename = '(' . $date_de_prise_en_charge . ') - ' . $type_m . ' - ' . $formattedTime . ' - ' . $wg_desc;
+
+$filename = preg_replace('/[^A-Za-z0-9_\-\(\)\s]/', '', $filename); 
 
 $dompdf->stream($filename, ["Attachment" => 0]);
 exit;
