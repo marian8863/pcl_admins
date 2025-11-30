@@ -69,7 +69,7 @@ list($hour, $minute) = explode(':', $Time);
 $formattedTime = ltrim($hour, '0') . 'h' . $minute . 'min';
 
 
-$filename = '(' . $date_de_prise_en_charge . ') - '  . $formattedTime ;
+$filename = 'INVOICE(' . $date_de_prise_en_charge . ') - '  . $formattedTime ;
 
 $filename = preg_replace('/[^A-Za-z0-9_\-\(\)\s]/', '', $filename); 
 
