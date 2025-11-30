@@ -66,7 +66,7 @@ $Time = $passenger['Time'];
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Invoice Template</title>
+<title>INVOICE</title>
 <style>
 body { font-family: DejaVu Sans, sans-serif; font-size: 12px; color: #000; margin: 0; padding-bottom: 60px; }
 .header { margin-bottom: 20px; }
