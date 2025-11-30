@@ -37,9 +37,9 @@ if ($p_id <= 0 || $invoice_id <= 0) {
 
 
 // --- Build URL of the template HTML page ---
-// $template_url = "http://localhost/pcl_admin/pcl_admins/admin/invoice_pdf1?get_id={$p_id}&invoice_id={$invoice_id}";
+// $template_url = "http://localhost/pcl_admin/pcl_admins/admin/invoice_p?get_id={$p_id}&invoice_id={$invoice_id}";
 
-$template_url = "https://booking.pariscablimousine.com/admin/invoice_pdf1?get_id={$p_id}&invoice_id={$invoice_id}";
+$template_url = "https://booking.pariscablimousine.com/admin/invoice_p?get_id={$p_id}&invoice_id={$invoice_id}";
 
 // $url = 'https://booking.pariscablimousine.com/admin/pdf_print?get_id='. urlencode($pid) . '&type=' . urlencode($pdfType);
 
