@@ -11,11 +11,12 @@ if(isset($_GET['get_id'])){
 $pdfType = $_GET['type'] ?? 'billing'; // default billing
     $sql="SELECT 
 
-    passenger.date_de_prise_en_charge,
+    passenger.date_de_prise_en_charge,passenger.Time,
+    who_give_booking.wg_desc,
     type_mission.type_m
 
-    FROM passenger,type_mission
-    WHERE  type_mission.tm_id=passenger.tm_id and
+    FROM passenger,type_mission,who_give_booking
+    WHERE  type_mission.tm_id=passenger.tm_id and  passenger.p_id=who_give_booking.p_id and
     
      passenger.p_id=$pid";
       $result = mysqli_query($con,$sql);
@@ -23,7 +24,9 @@ $pdfType = $_GET['type'] ?? 'billing'; // default billing
           $row=mysqli_fetch_assoc($result);
 
           $date_de_prise_en_charge=$row['date_de_prise_en_charge'];
-          $type_m=$row['type_m'];    
+          $type_m=$row['type_m']; 
+          $Time=$row['Time']; 
+          $wg_desc=$row['wg_desc'];    
       }
 
 }
@@ -98,7 +101,15 @@ $html = file_get_contents($url);
     $dompdf->render();
 
     // Output the generated PDF (1 = download and 0 = preview) 
-    $dompdf->stream('('.$date_de_prise_en_charge.') -'.$type_m ,  array("Attachment" => 0));exit;
+    // $dompdf->stream('('.$date_de_prise_en_charge.') -'.$type_m ,  array("Attachment" => 0));exit;
+
+
+$filename = '(' . $date_de_prise_en_charge . ') - ' . $type_m . ' - ' . $Time . ' - ' . $wg_desc;
+$filename = preg_replace('/[^A-Za-z0-9\-\(\)\s]/', '', $filename); // remove special chars
+
+$dompdf->stream($filename, ["Attachment" => 0]);
+exit;
+
 
 
 ?>
