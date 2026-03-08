@@ -430,15 +430,8 @@ BETWEEN DATE_FORMAT(CURDATE(), '%Y-01-01')
 AND DATE_FORMAT(CURDATE(), '%Y-12-31')
 $extra_condition
 
-ORDER BY 
-CASE
-    WHEN passenger.date_de_prise_en_charge = CURDATE() THEN 0
-    WHEN YEAR(passenger.date_de_prise_en_charge) = YEAR(CURDATE()) 
-     AND MONTH(passenger.date_de_prise_en_charge) = MONTH(CURDATE()) THEN 1
-    ELSE 2
-END,
-passenger.date_de_prise_en_charge,
-passenger.Time
+ORDER BY passenger.date_de_prise_en_charge DESC,
+         passenger.Time DESC
 ";
 $result = mysqli_query($con, $query);
 
