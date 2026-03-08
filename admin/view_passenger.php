@@ -500,8 +500,10 @@ if ($result) {
                     <th>Time</th>
                     <th>Type de Mission</th>
                     <th>Passager Principal</th>
+                    
                   <?php if (in_array($user_type, ['admin', 'ADM'])): ?>
                       <th>Driver</th>
+                      <th>Bookiing Provider</th>
                       <th>Admin Action</th>
                       <th>Driver Action</th>
                   <?php elseif ($user_type === 'driver'): ?>
@@ -577,6 +579,7 @@ if ($result) {
                         <td><?= $row['Time']?></td>
                         <td><?= $row['type_m']?></td>
                         <td><?= $row['passager_principal']?></td>
+                        
                         <?php if (in_array($user_type, ['admin', 'ADM'])): ?>
                         <td style="min-width:280px">
                           
@@ -595,6 +598,19 @@ if ($result) {
                                 <button type="submit" name="update_driver" class="btn btn-sm btn-primary">Save</button>
                               </form>
                         </td>
+                        <td>
+                        <?php 
+                        if ($row['wg_desc'] === 'No_wgOption') {
+                          ?>
+                            <p style=" color: red;font-weight: bold;">NO PROVIDER </p>
+                            <?php
+                        } else {
+                          ?>
+                            <?= $row['wg_desc']?>
+                            <?php
+                        }?>
+                      
+                      </td>
                           <?php endif; ?>
 
                           
