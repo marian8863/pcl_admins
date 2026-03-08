@@ -431,10 +431,11 @@ AND DATE_FORMAT(CURDATE(), '%Y-12-31')
 $extra_condition
 
 ORDER BY 
-CASE 
-    WHEN MONTH(passenger.date_de_prise_en_charge) = MONTH(CURDATE()) 
-    THEN 0 
-    ELSE 1 
+CASE
+    WHEN passenger.date_de_prise_en_charge = CURDATE() THEN 0
+    WHEN YEAR(passenger.date_de_prise_en_charge) = YEAR(CURDATE()) 
+     AND MONTH(passenger.date_de_prise_en_charge) = MONTH(CURDATE()) THEN 1
+    ELSE 2
 END,
 passenger.date_de_prise_en_charge,
 passenger.Time
