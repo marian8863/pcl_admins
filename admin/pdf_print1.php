@@ -117,7 +117,7 @@ if(isset($_GET['get_id'])){
           <li>SIRET : 840056022</li>
           <li>TVA : FR2084056022</li>
           <li>N° EVTC095180698</li>
-          <li>Email: pariscablimo@gmail.com</li>
+          <li>Email: booking@pariscablimousine.com</li>
           <li>Tél.: +33 660 763 235</li>
           
           </ul>

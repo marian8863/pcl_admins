@@ -173,7 +173,7 @@ if ($row['dropoff_location'] === 'others') {
           <li>SIRET : 840056022</li>
           <li>TVA : FR2084056022</li>
           <li>N° EVTC095180698</li>
-          <li>Email: pclfacture@gmail.com</li>
+          <li>Email: booking@pariscablimousine.com</li>
           <li>Tél.: +33 660 763 235</li>
           
           </ul>
