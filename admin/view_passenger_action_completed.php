@@ -424,12 +424,16 @@ LEFT JOIN flight_locations pickup
        ON passenger.pickup_location = pickup.id
 LEFT JOIN flight_locations dropoff 
        ON passenger.dropoff_location = dropoff.id
-WHERE passenger.Create_job_action = 'completed'
-AND passenger.date_de_prise_en_charge 
-BETWEEN DATE_FORMAT(CURDATE(), '%Y-01-01')
-AND DATE_FORMAT(CURDATE(), '%Y-12-31')
-$extra_condition
-ORDER BY passenger.date_de_prise_en_charge, passenger.Time
+WHERE passenger.Create_job_action = 'completed' $extra_condition
+ORDER BY 
+CASE 
+    WHEN YEAR(passenger.date_de_prise_en_charge) = YEAR(CURDATE())
+     AND MONTH(passenger.date_de_prise_en_charge) = MONTH(CURDATE())
+    THEN 0 
+    ELSE 1 
+END,
+passenger.date_de_prise_en_charge,
+passenger.Time
 ";
 $result = mysqli_query($con, $query);
 
@@ -505,6 +509,7 @@ if ($result) {
                     <th>Type de Mission</th>
                     <th>Passager Principal</th>
                   <?php if (in_array($user_type, ['admin', 'ADM'])): ?>
+                      <th>Amount</th>
                       <th>Driver</th>
                       <th>Bookiing Provider</th>
                       <th>Admin Action</th>
@@ -583,6 +588,7 @@ if ($result) {
                         <td><?= $row['type_m']?></td>
                         <td><?= $row['passager_principal']?></td>
                         <?php if (in_array($user_type, ['admin', 'ADM'])): ?>
+                        <td><?= $row['Tarif']?></td>
                         <td style="min-width:280px">
                           
                               <!-- Admin & ADM can assign/change driver -->
