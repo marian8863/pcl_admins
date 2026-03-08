@@ -111,7 +111,7 @@ $filename = '(' . $date_de_prise_en_charge . ') - ' . $type_m . ' - ' . $formatt
 
 $filename = preg_replace('/[^A-Za-z0-9_\-\(\)\s]/', '', $filename); 
 
-$dompdf->stream($filename, ["Attachment" => 0]);
+$dompdf->stream($filename, ["Attachment" => 1]);
 exit;
 
 
