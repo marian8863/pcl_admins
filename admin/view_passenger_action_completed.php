@@ -424,7 +424,11 @@ LEFT JOIN flight_locations pickup
        ON passenger.pickup_location = pickup.id
 LEFT JOIN flight_locations dropoff 
        ON passenger.dropoff_location = dropoff.id
-WHERE passenger.Create_job_action = 'completed' $extra_condition
+WHERE passenger.Create_job_action = 'completed'
+AND passenger.date_de_prise_en_charge 
+BETWEEN DATE_FORMAT(CURDATE(), '%Y-01-01')
+AND DATE_FORMAT(CURDATE(), '%Y-12-31')
+$extra_condition
 ORDER BY passenger.date_de_prise_en_charge, passenger.Time
 ";
 $result = mysqli_query($con, $query);
